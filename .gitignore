@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Output data (large numpy files)
+output/*.npz
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
