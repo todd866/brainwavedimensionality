@@ -30,7 +30,7 @@ We propose that cortical oscillations implement a \emph{dimensional hierarchy}: 
 
 \subsection{The Dimensionality Question}
 
-Influential work on oscillatory dynamics in prefrontal cortex suggests that different frequency bands serve distinct computational roles \citep{miller2018working,lundqvist2016gamma}. Low-frequency oscillations are often characterised as ``low-dimensional'' coordinating signals, while gamma activity is associated with ``high-dimensional'' information processing \citep{bastos2015visual}.
+Influential work on oscillatory dynamics in prefrontal cortex suggests that different frequency bands serve distinct computational roles \citep{miller2018working,lundqvist2016gamma}. Low-frequency oscillations are often characterised as ``low-dimensional'' coordinating signals, while gamma activity is associated with ``high-dimensional'' information processing \citep{bastos2015visual}. Meanwhile, large-scale neural recordings reveal that population activity can occupy surprisingly high-dimensional spaces \citep{cunningham2014dimensionality,stringer2019spontaneous}.
 
 However, this framing conflates two distinct notions of dimensionality:
 \begin{enumerate}
@@ -68,6 +68,8 @@ Long-wavelength (slow) oscillations provide the \emph{temporal stability} requir
 
 \subsection{Laplacian Eigenmodes and Participation Ratio}
 
+Graph Laplacian eigenmodes provide a natural basis for analysing spatially extended oscillatory patterns \citep{atasoy2016connectome}. Lower eigenvalues correspond to smoother, longer-wavelength modes; higher eigenvalues correspond to more localised, shorter-wavelength modes.
+
 \subsubsection{Network Construction}
 
 We model cortical connectivity using a modular (stochastic block) network with $N = 2500$ nodes organised into 25 modules of 100 nodes each. Connection probability within modules was $p_{\text{within}} = 0.3$; between modules, $p_{\text{between}} = 0.01$.
@@ -83,7 +85,7 @@ The unnormalised graph Laplacian $L$ has diagonal entries equal to node degree a
 
 \subsubsection{Participation Ratio}
 
-For a normalised eigenmode $\psi$ across $N$ oscillators:
+The participation ratio (PR), originally developed to quantify localisation in disordered solids \citep{bell1970atomic}, measures how many oscillators contribute significantly to a given mode. For a normalised eigenmode $\psi$ across $N$ oscillators:
 \begin{equation}
     \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
 \end{equation}
@@ -95,6 +97,8 @@ PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when acti
 To verify that the participation ratio metric correctly distinguishes global from local activity in time-series data, we generated synthetic multi-channel signals. Slow activity (2--8 Hz) was simulated as a global oscillation with high inter-channel correlation ($r = 0.8$); fast activity (30--50 Hz) was simulated as sparse, uncorrelated bursts. The combined signal was bandpass filtered and PR was computed on amplitude envelopes over 200 ms sliding windows. This establishes that PR correctly identifies global versus local activity when the spatial structure is uncontaminated by volume conduction.
 
 \subsection{Bottleneck Compression}
+
+The information bottleneck principle \citep{tishby2000information} formalises the trade-off between compression and preservation of task-relevant information. We use encoder-decoder networks to explore how bottleneck dimensionality affects code formation.
 
 \subsubsection{Category Construction}
 
@@ -180,7 +184,7 @@ These results suggest that cortical frequency bands implement a cascade of dimen
 
 \begin{itemize}
     \item \textbf{Slow oscillations (delta, theta)}: Maintain the high-dimensional volumetric substrate. Many oscillators participate coherently, providing the ``canvas'' for computation.
-    \item \textbf{Beta oscillations ($k \approx 3$)}: Intermediate compression. The manifold is constrained but remains ``floppy''---continuous enough for analog manipulation, mental rotation, holding ambiguity.
+    \item \textbf{Beta oscillations ($k \approx 3$)}: Intermediate compression. Beta rhythms are associated with maintenance of the current cognitive state \citep{engel2010beta}. The manifold is constrained but remains ``floppy''---continuous enough for analog manipulation, mental rotation, holding ambiguity.
     \item \textbf{Gamma oscillations ($k \approx 2$)}: Tight compression. Forces categorical commitment---symbols, decisions, assertions. Optimal for transmission but sacrifices nuance.
 \end{itemize}
 
@@ -205,7 +209,7 @@ We speculate that the capacity to sustain $k \geq 3$ dynamics constitutes a geom
     \item \textbf{Mature cognition}: Can sustain $k \geq 3$. Holds contradictions without forcing resolution. Tolerates ambiguity. Sees multiple perspectives simultaneously.
 \end{itemize}
 
-This geometric capacity likely tracks the biological maturation of the prefrontal cortex (PFC). The PFC is the primary generator of top-down beta oscillations \citep{miller2018working} and is the last cortical region to fully myelinate, a process that continues into the mid-20s. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for collision-free logic may be physically rate-limited by this development. The immature brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, falls back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it defaults to a ``planar'' topology where paradoxes force immediate, binary resolution (impulsivity) rather than being held in suspension (cognitive control).
+This geometric capacity likely tracks the biological maturation of the prefrontal cortex (PFC). The PFC is the primary generator of top-down beta oscillations \citep{miller2018working} and is the last cortical region to fully myelinate, a process that continues into the mid-20s \citep{gogtay2004dynamic}. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for collision-free logic may be physically rate-limited by this development. The immature brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, falls back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it defaults to a ``planar'' topology where paradoxes force immediate, binary resolution (impulsivity) rather than being held in suspension (cognitive control).
 
 Long-wavelength oscillations provide the \emph{temporal stability} needed for this capacity. Slow waves have long autocorrelation times---they change gradually, providing a stable backdrop against which complex, collision-free trajectories can unfold. When slow-wave power is compromised (stress, sleep deprivation, developmental immaturity, certain psychiatric conditions), the system loses this stability and collapses to categorical processing.
 
