@@ -199,7 +199,9 @@ This computational architecture maps naturally onto the laminar structure of cor
 
 \subsection{Why Two Dimensions?}
 
-A striking feature of our bottleneck analysis is that optimal code formation occurs at $k=2$---a two-dimensional channel. This is precisely the dimensionality of the cortical sheet itself, which is fundamentally a 2D surface crumpled to fit within the 3D cranial volume. The coincidence is suggestive: perhaps the cortical surface area evolved to provide exactly the channel capacity needed for discrete code formation from high-dimensional volumetric dynamics. If so, surface area rather than volume would be the fundamental constraint on representational capacity---consistent with the observation that cortical folding (which increases surface area without increasing volume) correlates with cognitive complexity across species.
+A striking feature of our bottleneck analysis is that optimal code formation occurs at $k=2$---a two-dimensional channel. This is not arbitrary: it reflects a topological constraint. The input categories in our model are distinguished by phase relationships, which are inherently cyclic. Mathematically, phase lives on a circle ($S^1$). To embed a circle in Euclidean space without discontinuities requires exactly two dimensions---one dimension is insufficient (the circle must be ``cut''), while three or more dimensions are redundant.
+
+This topological argument suggests a functional reason for the laminar, 2D organization of the cortex: it is the \emph{minimal} manifold capable of representing phase-based codes (orientation, navigation, sequence position) without singularities. A purely volumetric (3D) organisation might support high-dimensional analog dynamics but would lack the constraint that forces discretisation. The 2D sheet acts as the optimal bottleneck: tight enough to force symbol formation, but sufficient to embed cyclic variables. If so, surface area rather than volume is the fundamental constraint on representational capacity---consistent with the observation that cortical folding correlates with cognitive complexity across species.
 
 \subsection{Limitations}
 
