@@ -58,17 +58,17 @@ Gamma & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
 
 The key insight is that \textbf{different bottleneck widths support qualitatively different computations}. At $k=2$, the system is forced to discretise---continuous manifolds collapse into distinct attractor basins (``symbols''). At $k \geq 3$, the system retains enough dimensionality to represent continuous processes, including self-referential structures that would produce trajectory collisions in lower dimensions.
 
-\subsection{Maturity as Dimensional Capacity}
+\subsection{Hypothesis: Maturity as Dimensional Capacity}
 
-We further speculate that the capacity to sustain $k \geq 3$ dynamics---to hold contradictions, ambiguity, and nuance without forcing premature resolution---constitutes a geometric signature of cognitive and emotional maturity. The immature or stressed mind collapses to $k=2$: black/white, good/bad, us/them. The mature mind can inhabit the ``compliant'' space where paradoxes coexist.
+We further hypothesise that the capacity to sustain $k \geq 3$ dynamics---to hold contradictions, ambiguity, and nuance without forcing premature resolution---constitutes a geometric signature of cognitive and emotional maturity. Under this hypothesis, the immature or stressed mind collapses to $k=2$: black/white, good/bad, us/them. The mature mind can inhabit the ``compliant'' space where paradoxes coexist.
 
-Long-wavelength (slow) oscillations provide the \emph{temporal stability} required for collision-free representations. When slow-wave power is reduced (stress, sleep deprivation, developmental immaturity), the system loses the substrate needed to maintain $k \geq 3$ dynamics and defaults to rigid categorical processing.
+Long-wavelength (slow) oscillations may provide the \emph{temporal stability} required for collision-free representations. When slow-wave power is reduced (stress, sleep deprivation, developmental immaturity), the system may lose the substrate needed to maintain $k \geq 3$ dynamics and default to rigid categorical processing.
 
 \section{Methods}
 
 \subsection{Laplacian Eigenmodes and Participation Ratio}
 
-Graph Laplacian eigenmodes provide a natural basis for analysing spatially extended oscillatory patterns \citep{atasoy2016connectome}. Lower eigenvalues correspond to smoother, longer-wavelength modes; higher eigenvalues correspond to more localised, shorter-wavelength modes.
+Graph Laplacian eigenmodes provide a natural basis for analysing spatially extended oscillatory patterns \citep{atasoy2016connectome}. Lower eigenvalues correspond to smoother, longer-wavelength modes; higher eigenvalues correspond to more localised, shorter-wavelength modes. Under a diffusive wave equation on the graph, eigenvalue $\lambda$ relates to characteristic frequency as $\omega \propto \sqrt{\lambda}$, so we interpret normalised eigenvalue as approximately proportional to frequency squared.
 
 \subsubsection{Network Construction}
 
@@ -90,7 +90,9 @@ The participation ratio (PR), originally developed to quantify localisation in d
     \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
 \end{equation}
 
-PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK.
+PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK. The negative correlation between eigenvalue and PR is robust across network topologies (modular, lattice, small-world).
+
+\textbf{Note on dimensionality terminology.} PR quantifies \emph{spatial participation}---how many oscillators contribute to a given mode---not the intrinsic dimensionality of the state-space manifold (as typically measured by PCA or factor analysis). The latter depends on which modes are simultaneously excited and how they interact. Our claim is about the geometric substrate: slower modes engage more degrees of freedom, providing a higher-capacity ``canvas.''
 
 \subsubsection{Synthetic Time-Series Validation}
 
@@ -154,25 +156,26 @@ Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR c
 
 \subsection{Discrete Codes Emerge at $k=2$}
 
-Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k=2$ (ARI = 0.88). At $k=1$, information is lost (ARI = 0.64). At $k \geq 3$, discretisation pressure diminishes and codes become more continuous (ARI = 0.85--0.87).
+Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed, qualitatively stable across seeds). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87).
 
-The critical $k=2$ reflects a topological constraint: the input categories are distinguished by phase relationships (cyclic, $S^1$ topology). Embedding a circle requires exactly 2 dimensions; 1D is insufficient, 3D is redundant.
+The critical $k \approx 2$ reflects a topological constraint: the input categories are distinguished by phase relationships (cyclic, $S^1$ topology). Embedding a circle requires at least 2 dimensions. However, as Section~\ref{sec:paradox} demonstrates, $k=3$ becomes essential when trajectories must evolve over time without self-intersection.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../figures/fig2_code_formation_bottleneck.pdf}
-    \caption{\textbf{Discrete codes emerge at critical capacity.} (A) Code formation (ARI) peaks at $k=2$, reflecting the $S^1$ topology of the phase-defined categories. While $k=3$ is topologically redundant for static embedding, Figure~\ref{fig:paradox} shows it is dynamically essential for non-intersecting trajectories. (B) Bottleneck codes at $k=2$ form six distinct clusters. (C) Schematic of compression mechanism.}
+    \caption{\textbf{Discrete codes emerge at critical capacity.} (A) Code formation (ARI) peaks at $k \approx 2$--3, reflecting the $S^1$ topology of the phase-defined categories. (B) Bottleneck codes at $k=2$ form six distinct clusters, each interpretable as a proto-symbol. (C) Schematic: high-dimensional slow-wave patterns compress through a noisy bottleneck, forcing discretisation when channel capacity is limited.}
     \label{fig:bottleneck}
 \end{figure}
 
-\subsection{Self-Reference Requires $k \geq 3$}
+\subsection{Self-Reference Benefits from $k \geq 3$}
+\label{sec:paradox}
 
-Figure~\ref{fig:paradox} demonstrates collision dynamics. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (the system cannot distinguish ``going TRUE$\rightarrow$FALSE'' from ``returning FALSE$\rightarrow$TRUE''). In 3D, the trajectory forms a helix with zero self-intersections---the system can represent the \emph{process} of the paradox without confusion.
+Figure~\ref{fig:paradox} demonstrates collision dynamics. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (the system cannot distinguish ``going TRUE$\rightarrow$FALSE'' from ``returning FALSE$\rightarrow$TRUE''). In 3D, the trajectory forms a helix with zero self-intersections---the system can represent the \emph{process} of the paradox without confusion. A linear autoencoder trained to compress and reconstruct this helix through a $k=2$ bottleneck fails to preserve the time dimension (MSE = 0.31 on time vs.\ 0.008 on position), while $k=3$ achieves perfect reconstruction---confirming that the topological collision is a functional barrier, not merely a visual artefact.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../figures/fig4_paradox_topology.pdf}
-    \caption{\textbf{Self-referential logic requires $k \geq 3$.} (A) In 2D, the paradox trajectory collides with itself every cycle. (B) In 3D, the trajectory spirals upward (helix), avoiding collision. Time/meta-level provides the escape dimension.}
+    \caption{\textbf{In this representation, $k=3$ allows collision-free embedding of self-referential logic.} (A) In 2D, the paradox trajectory collides with itself every cycle. Collisions are defined as point pairs that are spatially close ($< 0.15$ units) but temporally distant ($> 10$ steps). Colour encodes time (dark $\to$ light). (B) In 3D, the trajectory spirals upward (helix), avoiding collision---time provides the escape dimension.}
     \label{fig:paradox}
 \end{figure}
 
@@ -200,9 +203,9 @@ The paradox simulation reveals a fundamental distinction:
 
 This explains why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). The dimensional constraint determines what kinds of logic are representable.
 
-\subsection{Maturity and Long-Wavelength Stability}
+\subsection{Hypothesis: Maturity and Long-Wavelength Stability}
 
-We speculate that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional maturity:
+We hypothesise that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional maturity:
 
 \begin{itemize}
     \item \textbf{Immature/stressed cognition}: Defaults to $k=2$. Everything is binary: good/bad, right/wrong, us/them. Contradictions are intolerable; ambiguity provokes anxiety.
@@ -222,6 +225,17 @@ The well-documented coupling between slow-wave phase and gamma amplitude \citep{
 This architecture maps onto cortical laminar structure: deep layers (L5/6) with extensive horizontal connectivity support the slow, high-dimensional substrate; superficial layers (L2/3) with gamma-dominant activity implement the bottleneck \citep{vankerkoerle2014alpha}. The laminar segregation of alpha/beta (deep, feedback) versus gamma (superficial, feedforward) aligns precisely with the proposed hierarchy.
 
 More broadly, the motif of electric fields interacting with 2D surfaces recurs across biology: cell membranes, bioelectric gradients in morphogenesis \citep{levin2021bioelectric}, and cortical sheets all share this geometric configuration. The 2D surface may be a broadly useful architecture for transforming continuous volumetric dynamics into discrete signals.
+
+\subsection{Testable Predictions}
+
+The framework generates several concrete predictions for future empirical work:
+
+\begin{enumerate}
+    \item \textbf{PR across frequency bands}: In dense intracranial recordings (Utah arrays, high-density ECoG), beta-band activity should engage more channels (higher PR) than gamma-band activity during flexible cognition tasks, while both should engage more than rest.
+    \item \textbf{State-space trajectories}: During tasks requiring cognitive flexibility (e.g., set-shifting), decoded neural trajectories should exhibit more continuous, less clustered structure than during categorical decision tasks.
+    \item \textbf{Cross-frequency structure}: The number of distinguishable gamma ``packets'' per slow-wave cycle should be constrained to approximately $k=2$ worth of information, potentially explaining working memory capacity limits.
+    \item \textbf{Developmental trajectory}: PR measures for beta-band activity in frontal regions should increase with age through adolescence, paralleling PFC myelination.
+\end{enumerate}
 
 \subsection{Limitations and Measurement Requirements}
 

@@ -4,12 +4,12 @@ Code and figures for the paper: **"The Dimensional Hierarchy of Cortical Oscilla
 
 ## Abstract
 
-We propose that cortical oscillations implement a *dimensional hierarchy*: a cascade of progressively tighter information bottlenecks from slow to fast frequencies. Slow eigenmodes engage substantially more oscillators than fast modes (r = -0.75), establishing the high-dimensional geometric substrate. Discrete symbolic codes emerge at a critical bottleneck width of k=2, while k=3 preserves continuous "floppy" dynamics capable of representing self-referential structures without trajectory collision.
+We propose that cortical oscillations implement a *dimensional hierarchy*: a cascade of progressively tighter information bottlenecks from slow to fast frequencies. Slow eigenmodes engage substantially more oscillators than fast modes (r = -0.75), establishing the high-dimensional geometric substrate. Discrete symbolic codes emerge at a critical bottleneck width of k=2, while k=3 preserves continuous "compliant" dynamics capable of representing self-referential structures without trajectory collision.
 
 | Band | Bottleneck | Topology | Function |
 |------|-----------|----------|----------|
 | Delta/Theta | k >> 3 | Volumetric | Raw substrate |
-| Beta | k ≈ 3 | Floppy manifold | Manipulation, meta-cognition |
+| Beta | k ≈ 3 | Compliant manifold | Manipulation, meta-cognition |
 | Gamma | k ≈ 2 | Discrete clusters | Symbols, decisions |
 
 ## Key Results
@@ -29,12 +29,14 @@ We propose that cortical oscillations implement a *dimensional hierarchy*: a cas
 │   ├── laplacian_pr.py          # Graph Laplacian participation ratio
 │   ├── code_formation.py        # Bottleneck compression simulation
 │   ├── paradox_topology.py      # Liar's Paradox collision dynamics
+│   ├── paradox_learning.py      # Linear autoencoder proof of k=3 requirement
 │   └── real_data_pr.py          # Synthetic validation
 └── figures/
     ├── fig1_laplacian_participation.pdf
     ├── fig2_code_formation_bottleneck.pdf
     ├── fig3_synthetic_pr_validation.pdf
-    └── fig4_paradox_topology.pdf
+    ├── fig4_paradox_topology.pdf
+    └── fig4b_paradox_learning.pdf
 ```
 
 ## Running the Simulations
@@ -48,6 +50,7 @@ cd src
 python laplacian_pr.py
 python code_formation.py
 python paradox_topology.py
+python paradox_learning.py
 python real_data_pr.py
 ```
 

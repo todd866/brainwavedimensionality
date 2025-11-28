@@ -243,7 +243,7 @@ def run_bottleneck_sweep():
     print(f"  Categories: {len(torch.unique(labels))}")
 
     # Bottleneck widths to test
-    bottleneck_dims = [1, 2, 4, 8, 16, 32]
+    bottleneck_dims = [1, 2, 3, 4, 8, 16, 32]
     noise_std = 0.5  # Higher noise forces discretization
 
     results = {
