@@ -203,6 +203,8 @@ A striking feature of our bottleneck analysis is that optimal code formation occ
 
 This topological argument suggests a functional reason for the laminar, 2D organization of the cortex: it is the \emph{minimal} manifold capable of representing phase-based codes (orientation, navigation, sequence position) without singularities. A purely volumetric (3D) organisation might support high-dimensional analog dynamics but would lack the constraint that forces discretisation. The 2D sheet acts as the optimal bottleneck: tight enough to force symbol formation, but sufficient to embed cyclic variables. If so, surface area rather than volume is the fundamental constraint on representational capacity---consistent with the observation that cortical folding correlates with cognitive complexity across species.
 
+Notably, this motif---electric fields interacting with 2D surfaces---recurs across biology: cell membranes, bioelectric gradients in morphogenesis \citep{levin2021bioelectric}, and cortical sheets all share this geometric configuration. We do not claim universality, but the pattern suggests that 2D surfaces interfacing with volumetric fields may be a broadly useful architecture for biological information processing.
+
 \subsection{Limitations}
 
 The modular network model captures the key feature of cortical organisation (dense local, sparse global connectivity) but does not model excitatory--inhibitory circuitry, conduction delays, or synaptic nonlinearities that shape real slow--gamma interactions; our goal here is to isolate the geometric and information-theoretic aspects of the problem. The bottleneck model is abstract and does not specify neural mechanisms for compression. Future work should test these predictions in biologically realistic spiking network models and empirical neural data.
@@ -214,10 +216,6 @@ Slow oscillations are geometrically high-dimensional: they coordinate many oscil
 \section*{Data Availability}
 
 Code for all simulations is available at: \url{https://github.com/todd866/brainwavedimensionality}
-
-\section*{Acknowledgments}
-
-[To be added]
 
 \bibliographystyle{apalike}
 \bibliography{references}
