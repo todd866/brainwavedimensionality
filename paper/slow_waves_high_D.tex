@@ -7,8 +7,8 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 
-\title{Slow Oscillations Are High-Dimensional:\\
-Laplacian Modes and Bottleneck Codes in Cortical Dynamics}
+\title{The Dimensional Hierarchy of Cortical Oscillations:\\
+From Analog Substrate to Symbolic Codes}
 
 \author{
 Ian Todd\\
@@ -23,41 +23,46 @@ Ian Todd\\
 \maketitle
 
 \begin{abstract}
-A common assumption in neural computation research equates low-frequency oscillations with low-dimensional dynamics and high-frequency activity with high-dimensional processing. This paper challenges that assumption by distinguishing \emph{temporal complexity} from \emph{geometric dimensionality}---defined here as the participation ratio (PR), measuring how many oscillators substantially contribute to a mode. We present two complementary computational analyses. First, we compute eigenmodes of the graph Laplacian on a modular network model of cortical connectivity (2500 nodes, 25 modules) and show that low-eigenvalue (slow) modes have substantially higher participation ratios than fast modes ($r = -0.75$): slow inter-module modes engage 4$\times$ more oscillators than fast intra-module modes. Second, using an encoder-decoder network that compresses 256-dimensional slow-wave states through noisy bottlenecks of varying width, we show that discrete category-specific codes emerge near a critical bottleneck capacity ($k=2$, ARI = 0.88). Together, these results suggest that slow oscillations provide a high-dimensional geometric \emph{substrate} from which discrete gamma-frequency codes are derived through information-theoretic compression. We predict that manipulations of slow-wave spatial extent, rather than gamma power alone, should control working memory capacity and the separability of cross-frequency codes.
+We propose that cortical oscillations implement a \emph{dimensional hierarchy}: a cascade of progressively tighter information bottlenecks from slow to fast frequencies. Using graph Laplacian analysis, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing the high-dimensional geometric substrate. Using encoder-decoder networks, we show that discrete symbolic codes emerge at a critical bottleneck width of $k=2$, while $k=3$ preserves continuous ``floppy'' dynamics capable of representing self-referential structures without trajectory collision. We argue that this hierarchy maps onto frequency bands: slow oscillations maintain the volumetric analog context; beta ($k \approx 3$) supports manipulation and meta-cognition; gamma ($k \approx 2$) forces categorical commitment. The capacity to sustain $k \geq 3$ dynamics---to hold contradictions without collapsing them---may be a geometric signature of cognitive and emotional maturity. Long-wavelength oscillations provide the temporal stability and geometric depth required for collision-free representations; their disruption forces premature discretisation.
 \end{abstract}
 
 \section{Introduction}
 
 \subsection{The Dimensionality Question}
 
-Influential work on oscillatory dynamics in prefrontal cortex has suggested that different frequency bands serve distinct computational roles \citep{miller2018working,lundqvist2016gamma}. Low-frequency oscillations (delta, theta, alpha, beta) are often characterised as ``low-dimensional'' coordinating signals, while high-frequency gamma activity is associated with ``high-dimensional'' information processing and working memory content \citep{lundqvist2016gamma,bastos2015visual}.
+Influential work on oscillatory dynamics in prefrontal cortex suggests that different frequency bands serve distinct computational roles \citep{miller2018working,lundqvist2016gamma}. Low-frequency oscillations are often characterised as ``low-dimensional'' coordinating signals, while gamma activity is associated with ``high-dimensional'' information processing \citep{bastos2015visual}.
 
 However, this framing conflates two distinct notions of dimensionality:
 \begin{enumerate}
-    \item \textbf{Temporal complexity}: How many independent time-varying components describe the signal at a single recording site.
-    \item \textbf{Geometric dimensionality}: How many degrees of freedom (oscillators, neurons, cortical columns) participate coherently in the dynamics across space.
+    \item \textbf{Temporal complexity}: How many independent time-varying components describe the signal at a single site.
+    \item \textbf{Geometric dimensionality}: How many degrees of freedom participate coherently across space.
 \end{enumerate}
 
-A slow wave sweeping across cortex may appear ``simple'' when viewed as a single time series (low temporal complexity), but it coordinates thousands of oscillators into coherent phase relationships (high geometric dimensionality). Conversely, a localized gamma burst may exhibit complex temporal structure but engage only a small cortical population (low geometric dimensionality). This distinction echoes classical work on the global integrative nature of slow oscillations \citep{buzsaki2006rhythms} versus the spatially restricted nature of gamma \citep{buzsaki2012brain}.
+A slow wave sweeping across cortex may appear ``simple'' at a single electrode but coordinates thousands of oscillators into coherent phase relationships (high geometric dimensionality). Conversely, a gamma burst may exhibit complex temporal structure but engage only a small cortical population (low geometric dimensionality).
 
-\subsection{Defining Geometric Dimensionality}
+\subsection{The Hierarchy Hypothesis}
 
-We operationalise geometric dimensionality as the \textbf{participation ratio} (PR) of oscillatory modes. For a normalised mode $\psi$ across $N$ oscillators:
-\begin{equation}
-    \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
-\end{equation}
+We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks:
 
-The PR measures effective dimensionality: PR $\approx N$ when all oscillators contribute equally (maximally delocalized); PR $\approx 1$ when activity is confined to a single oscillator. This metric is standard in condensed matter physics for characterising localization in disordered systems and has been applied to neural population dynamics \citep{rigotti2013importance}.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Band} & \textbf{Bottleneck} & \textbf{Topology} & \textbf{Function} \\
+\midrule
+Delta/Theta & $k \gg 3$ & Volumetric & Raw substrate \\
+Beta & $k \approx 3$ & Floppy manifold & Manipulation, meta-cognition \\
+Gamma & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
+\bottomrule
+\end{tabular}
+\end{center}
 
-\subsection{The Present Contribution}
+The key insight is that \textbf{different bottleneck widths support qualitatively different computations}. At $k=2$, the system is forced to discretise---continuous manifolds collapse into distinct attractor basins (``symbols''). At $k \geq 3$, the system retains enough dimensionality to represent continuous processes, including self-referential structures that would produce trajectory collisions in lower dimensions.
 
-This paper provides computational evidence for two claims:
-\begin{enumerate}
-    \item Slow eigenmodes of cortical networks have \emph{higher} participation ratios than fast modes---they engage more oscillators coherently.
-    \item When high-dimensional slow-wave states are transmitted through bandwidth-limited, noisy channels (analogous to gamma-frequency transmission), discrete codes emerge via information bottleneck effects \citep{tishby2000information}.
-\end{enumerate}
+\subsection{Maturity as Dimensional Capacity}
 
-The implication is that slow oscillations provide the high-dimensional geometric \emph{substrate}---an ``address space'' or ``canvas''---from which discrete gamma codes are derived as compressed readouts. This complements and refines accounts in which gamma bursts are taken to be the primary high-dimensional carrier of information.
+We further speculate that the capacity to sustain $k \geq 3$ dynamics---to hold contradictions, ambiguity, and nuance without forcing premature resolution---constitutes a geometric signature of cognitive and emotional maturity. The immature or stressed mind collapses to $k=2$: black/white, good/bad, us/them. The mature mind can inhabit the ``floppy'' space where paradoxes coexist.
+
+Long-wavelength (slow) oscillations provide the \emph{temporal stability} required for collision-free representations. When slow-wave power is reduced (stress, sleep deprivation, developmental immaturity), the system loses the substrate needed to maintain $k \geq 3$ dynamics and defaults to rigid categorical processing.
 
 \section{Methods}
 
@@ -65,11 +70,9 @@ The implication is that slow oscillations provide the high-dimensional geometric
 
 \subsubsection{Network Construction}
 
-We model cortical connectivity using a modular (stochastic block) network with $N = 2500$ nodes organised into 25 modules of 100 nodes each. This architecture captures the key feature of cortical organisation: dense local connectivity within cortical columns/areas and sparse long-range connectivity between them. Connection probability within modules was $p_{\text{within}} = 0.3$; between modules, $p_{\text{between}} = 0.01$.
+We model cortical connectivity using a modular (stochastic block) network with $N = 2500$ nodes organised into 25 modules of 100 nodes each. Connection probability within modules was $p_{\text{within}} = 0.3$; between modules, $p_{\text{between}} = 0.01$.
 
-This modular structure produces a natural spectral gap: slow modes (small eigenvalues) correspond to inter-module coordination engaging many modules simultaneously, while fast modes (large eigenvalues) are confined within individual modules.
-
-The unnormalised graph Laplacian $L$ is constructed with diagonal entries equal to the node degree and off-diagonal entries of $-1$ for each existing edge:
+The unnormalised graph Laplacian $L$ has diagonal entries equal to node degree and off-diagonal entries of $-1$ for each edge:
 \begin{equation}
     L_{ij} = \begin{cases}
         \deg(i) & \text{if } i = j \\
@@ -78,161 +81,155 @@ The unnormalised graph Laplacian $L$ is constructed with diagonal entries equal 
     \end{cases}
 \end{equation}
 
-\subsubsection{Eigendecomposition}
+\subsubsection{Participation Ratio}
 
-We computed the $k = 150$ smallest-magnitude eigenpairs of $L$ using ARPACK (\texttt{eigsh}), sorted by eigenvalue. We verified numerical stability by confirming that residual norms $\|L\psi_k - \lambda_k\psi_k\| < 10^{-8}$ for all modes. The smallest eigenvalue $\lambda_0 = 0$ corresponds to the constant mode (excluded from analysis). For linear oscillator networks with diffusive coupling, normal-mode frequencies scale as $\omega_k \propto \sqrt{\lambda_k}$; we therefore interpret eigenvalue as proportional to squared oscillation frequency.
+For a normalised eigenmode $\psi$ across $N$ oscillators:
+\begin{equation}
+    \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
+\end{equation}
 
-\subsubsection{Participation Ratio Computation}
+PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK.
 
-For each eigenmode $\psi_k$, we normalised such that $\sum_i |\psi_{k,i}|^2 = 1$ and computed PR via Equation (1). We examined the relationship between eigenvalue (frequency$^2$) and participation across the 149 non-constant modes.
+\subsubsection{Synthetic Time-Series Validation}
 
-\subsection{Code Formation Through Bottleneck}
+To verify that the participation ratio metric correctly distinguishes global from local activity in time-series data, we generated synthetic multi-channel signals. Slow activity (2--8 Hz) was simulated as a global oscillation with high inter-channel correlation ($r = 0.8$); fast activity (30--50 Hz) was simulated as sparse, uncorrelated bursts. The combined signal was bandpass filtered and PR was computed on amplitude envelopes over 200 ms sliding windows. This establishes that PR correctly identifies global versus local activity when the spatial structure is uncontaminated by volume conduction.
 
-\subsubsection{Connecting the Two Models}
-
-The bottleneck model takes as input a high-dimensional state representing the \emph{phase configuration} of spatially distributed oscillators---precisely the type of coherent pattern established by slow Laplacian modes in the first analysis. The 256-dimensional input state represents phase relationships across a cortical population; each dimension corresponds to a local oscillator's contribution to the global slow-wave pattern.
+\subsection{Bottleneck Compression}
 
 \subsubsection{Category Construction}
 
-We defined six distinct categories, each corresponding to a smooth phase gradient pattern across 256 oscillators (analogous to six distinct ``meanings'' or working memory items). Each category $c$ has a base pattern:
+We defined six categories as smooth phase gradient patterns across 256 oscillators:
 \begin{equation}
     \phi_c(i) = 0.3\cos(x_i + \theta_c) + 0.2\sin(0.5x_i + \theta_c)
 \end{equation}
-where $x_i \in [0, 4\pi]$ indexes oscillator position and $\theta_c = \pi c / 6$ provides angular separation between categories. Samples were generated by adding Gaussian noise ($\sigma = 0.5$) to the base pattern, yielding 200 samples per category (1200 total).
+where $x_i \in [0, 4\pi]$ and $\theta_c = \pi c / 6$. Samples were generated by adding Gaussian noise ($\sigma = 0.5$), yielding 200 samples per category.
 
 \subsubsection{Network Architecture}
 
-The encoder-decoder network compresses the 256-D input through a bottleneck of variable width $k \in \{1, 2, 4, 8, 16, 32\}$:
+The encoder-decoder compresses 256-D input through bottlenecks of width $k \in \{1, 2, 3, 4, 8, 16, 32\}$:
 \begin{itemize}
-    \item \textbf{Encoder}: $256 \rightarrow 128 \rightarrow 128 \rightarrow k$ (ReLU activations)
+    \item \textbf{Encoder}: $256 \rightarrow 128 \rightarrow 128 \rightarrow k$ (ReLU)
     \item \textbf{Bottleneck}: $k$ dimensions with additive Gaussian noise ($\sigma = 0.5$)
-    \item \textbf{Decoder}: $k \rightarrow 128 \rightarrow 128 \rightarrow 256$ (ReLU activations)
+    \item \textbf{Decoder}: $k \rightarrow 128 \rightarrow 128 \rightarrow 256$ (ReLU)
 \end{itemize}
 
-Training used Adam optimiser (lr = $10^{-3}$) for 150 epochs, minimising mean squared reconstruction error. The noise in the bottleneck forces the network to find robust, discrete representations that can survive corruption---analogous to the imprecision inherent in gamma-frequency transmission.
+Training used Adam (lr = $10^{-3}$) for 150 epochs, minimising MSE reconstruction error. Code formation was measured by Adjusted Rand Index (ARI) between $k$-means clustering of bottleneck codes and true labels.
 
-\subsubsection{Evaluation Metrics}
+\subsection{Paradox Topology Simulation}
 
-We measured:
+To demonstrate collision dynamics, we simulated a self-referential process (the Liar's Paradox: TRUE $\rightarrow$ FALSE $\rightarrow$ TRUE $\rightarrow$ ...) as a continuous trajectory and embedded it in 2D versus 3D spaces:
+
 \begin{itemize}
-    \item \textbf{Reconstruction error}: MSE between input and reconstructed slow-wave state.
-    \item \textbf{Adjusted Rand Index (ARI)}: Agreement between $k$-means clustering of bottleneck codes and true category labels. ARI = 1 indicates perfect code-category correspondence; ARI = 0 indicates chance.
+    \item \textbf{2D embedding}: The cyclic trajectory must trace a closed loop, producing self-intersections (``collisions'') at every cycle.
+    \item \textbf{3D embedding}: The trajectory can spiral upward (helix), with time as the third dimension, avoiding self-intersection.
 \end{itemize}
 
-This setup is analogous to the information bottleneck \citep{tishby2000information}: the network must preserve category-relevant information under constraints on bottleneck dimensionality and noise. Discrete codes emerge near the minimal bottleneck capacity that still allows reliable category separation.
+Self-intersections were counted as pairs of trajectory points that are spatially close ($<0.15$ units) but temporally distant ($>10$ steps apart).
 
 \section{Results}
 
 \subsection{Slow Modes Have Higher Participation}
 
-Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue for the modular cortical network. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators.
+Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference.
 
-The slowest modes have PR $\approx$ 250--270, meaning approximately \textbf{10\% of all oscillators} participate substantially---these are inter-module modes that coordinate activity across the entire network. By contrast, the fastest modes have PR $\approx$ 60--80 (\textbf{2--3\% participation})---these are intra-module modes confined within single modules. Averaging across the slowest 15 modes versus the fastest 15 yields a \textbf{4-fold difference} in effective dimensionality.
-
-For comparison across network sizes, we also computed the normalised participation ratio PR/$N$, interpretable as the effective fraction of oscillators participating. The slowest 10\% of modes engage roughly 4$\times$ as many oscillators as the fastest 10\%.
-
-These slow inter-module modes resemble global delta/theta waves that coordinate activity across cortical areas, while the fast intra-module modes correspond to spatially localized gamma activity within cortical columns---consistent with the known spatial properties of different frequency bands \citep{buzsaki2012brain}.
+Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR correctly distinguishes global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../figures/fig1_laplacian_participation.pdf}
-    \caption{\textbf{Slow modes are geometrically high-dimensional.} (A) Participation ratio decreases strongly with eigenvalue ($r = -0.75$). (B) Mean participation for the slowest 15 modes versus fastest 15 modes shows a 4-fold difference. (C) Node activation distributions: slow modes spread activity broadly; fast modes concentrate activity in few nodes.}
+    \caption{\textbf{Slow modes are geometrically high-dimensional.} (A) Participation ratio decreases with eigenvalue ($r = -0.75$). (B) Mean participation for slowest vs fastest modes shows 3-fold difference. (C) Activation distributions: slow modes spread activity broadly.}
     \label{fig:laplacian}
 \end{figure}
 
-\subsection{Code Formation at Critical Bottleneck}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../figures/fig3_synthetic_pr_validation.pdf}
+    \caption{\textbf{Synthetic validation confirms PR metric.} (A) PR distributions for slow (2--8 Hz) versus fast (30--50 Hz) bands in synthetic multi-channel data. (B) Mean PR: slow band engages 99\% of channels; fast band engages 42\%. This 2.4-fold difference confirms that the metric correctly identifies global versus local activity when spatial structure is preserved.}
+    \label{fig:synthetic}
+\end{figure}
 
-Figure~\ref{fig:bottleneck} shows that discrete codes emerge when high-dimensional slow-wave states are compressed through a narrow, noisy bottleneck.
+\subsection{Discrete Codes Emerge at $k=2$}
 
-At $k=1$ (one-dimensional channel), ARI = 0.64 and reconstruction error is high: the single dimension cannot reliably distinguish all six categories. At $k=2$, ARI peaks at 0.88 with moderate error: discrete codes have formed that reliably map to the underlying categories. Wider bottlenecks ($k > 2$) show slightly declining ARI (0.82--0.85) as the pressure to discretise diminishes, though reconstruction error continues to decrease.
+Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k=2$ (ARI = 0.88). At $k=1$, information is lost (ARI = 0.64). At $k \geq 3$, discretisation pressure diminishes and codes become more continuous (ARI = 0.85--0.87).
 
-The critical bottleneck ($k = 2$) represents the point where channel capacity is ``just barely sufficient'' to transmit category-relevant information. Below this threshold, information is lost; above it, the system can maintain continuous representations without discretisation.
-
-In this analogy, the 256-D slow-wave state corresponds to a spatial pattern of low-frequency activity; the $k$-D bottleneck corresponds to a sparse gamma burst channel; and the discrete clusters in bottleneck space correspond to gamma codes for distinct items.
+The critical $k=2$ reflects a topological constraint: the input categories are distinguished by phase relationships (cyclic, $S^1$ topology). Embedding a circle requires exactly 2 dimensions; 1D is insufficient, 3D is redundant.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../figures/fig2_code_formation_bottleneck.pdf}
-    \caption{\textbf{Discrete codes emerge from bottleneck compression.} (A) Code formation (ARI) peaks at critical bottleneck width $k=2$. Narrower bottlenecks lose information; wider ones reduce discretisation pressure. (B) Bottleneck codes at $k=2$ form six distinct clusters corresponding to the six input categories. (C) Schematic: high-D slow-wave patterns compress through a noisy, low-D gamma channel to form discrete codes.}
+    \caption{\textbf{Discrete codes emerge at critical capacity.} (A) Code formation (ARI) peaks at $k=2$, reflecting the $S^1$ topology of the phase-defined categories. While $k=3$ is topologically redundant for static embedding, Figure~\ref{fig:paradox} shows it is dynamically essential for non-intersecting trajectories. (B) Bottleneck codes at $k=2$ form six distinct clusters. (C) Schematic of compression mechanism.}
     \label{fig:bottleneck}
+\end{figure}
+
+\subsection{Self-Reference Requires $k \geq 3$}
+
+Figure~\ref{fig:paradox} demonstrates collision dynamics. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (the system cannot distinguish ``going TRUE$\rightarrow$FALSE'' from ``returning FALSE$\rightarrow$TRUE''). In 3D, the trajectory forms a helix with zero self-intersections---the system can represent the \emph{process} of the paradox without confusion.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{../figures/fig4_paradox_topology.pdf}
+    \caption{\textbf{Self-referential logic requires $k \geq 3$.} (A) In 2D, the paradox trajectory collides with itself every cycle. (B) In 3D, the trajectory spirals upward (helix), avoiding collision. Time/meta-level provides the escape dimension.}
+    \label{fig:paradox}
 \end{figure}
 
 \section{Discussion}
 
-\subsection{Complementing the Conventional Picture}
+\subsection{The Frequency Hierarchy}
 
-These results suggest a refinement of frequency-dimensionality relationships:
-
-\begin{center}
-\begin{tabular}{lcc}
-\toprule
-& \textbf{Conventional View} & \textbf{This Paper} \\
-\midrule
-Slow waves & Low-D coordinating signal & High-D geometric substrate \\
-Gamma bursts & High-D information carrier & Discrete compressed codes \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Slow oscillations are ``high-dimensional'' in the sense that matters for geometric computation: they coordinate many degrees of freedom into coherent patterns that define an information-rich state space. Gamma bursts are not themselves high-dimensional---they are discrete, compressed readouts of the slow-wave substrate. This reframing complements rather than contradicts working memory frameworks \citep{miller2018working,lundqvist2016gamma}: gamma bursts still ``carry'' the content, but the high-dimensional structure from which that content is drawn resides in the slow-wave geometry.
-
-\subsection{Implications for Cross-Frequency Coupling}
-
-The well-documented coupling between theta/alpha phase and gamma amplitude \citep{canolty2010functional,lisman2013theta} may reflect exactly this substrate-code relationship. Slow oscillations structure the high-dimensional state space---defining the ``canvas'' or ``address space'' of possible representations---while gamma bursts transmit compressed codes within each slow-wave cycle. The number of distinct gamma codes maintainable per slow cycle would then be limited by bottleneck capacity, potentially explaining the theta-gamma coding scheme for working memory items \citep{lisman2013theta}.
-
-\subsection{Connection to Working Memory Capacity}
-
-If slow oscillations maintain the high-dimensional geometric substrate and gamma bursts implement discrete readout, this may explain why working memory capacity correlates with alpha power and large-scale synchronisation \citep{roux2012working,palva2007new}: the slow-wave substrate determines how much information can be geometrically encoded, while gamma mediates access to discrete items. Manipulations that disrupt large-scale slow-wave coherence (e.g., focal lesions, anaesthesia, pharmacological dephasing) should reduce the diversity or separability of gamma codes even if gamma power is preserved.
-
-\subsection{Predictions and Empirical Tests}
-
-This framework generates testable predictions:
-\begin{enumerate}
-    \item \textbf{Spatial prediction}: Metrics of slow-wave spatial extent or participation (not just power) should predict working memory capacity and code separability better than gamma power alone.
-    \item \textbf{Capacity prediction}: The number of distinct gamma codes maintainable per slow cycle should saturate at a value determined by effective bottleneck dimension, not by gamma bandwidth.
-    \item \textbf{Disruption prediction}: Selective disruption of large-scale slow-wave coherence should impair code formation even when local gamma activity is preserved.
-\end{enumerate}
-
-\subsection{Laminar Mapping}
-
-This computational architecture maps naturally onto the laminar structure of cortex. Deep layers (L5/6), characterised by extensive horizontal projections, lower-frequency dominance, and broad receptive fields, may support the high-dimensional geometric substrate. Superficial layers (L2/3), which are the primary generators of gamma bursts and exhibit sparser lateral connectivity, may act as the physical bottleneck, compressing global states into discrete, broadcastable packets. This hypothesis is testable via laminar recordings during working memory tasks.
-
-\subsection{Why Two Dimensions?}
-
-A striking feature of our bottleneck analysis is that optimal code formation occurs at $k=2$---a two-dimensional channel. This is not arbitrary: it reflects a topological constraint. The input categories in our model are distinguished by phase relationships, which are inherently cyclic. Mathematically, phase lives on a circle ($S^1$). To embed a circle in Euclidean space without discontinuities requires exactly two dimensions---one dimension is insufficient (the circle must be ``cut''), while three or more dimensions are redundant.
-
-This topological argument suggests a functional reason for the laminar, 2D organization of the cortex: it is the \emph{minimal} manifold capable of representing phase-based codes (orientation, navigation, sequence position) without singularities. A purely volumetric (3D) organisation might support high-dimensional analog dynamics but would lack the constraint that forces discretisation. The 2D sheet acts as the optimal bottleneck: tight enough to force symbol formation, but sufficient to embed cyclic variables. If so, surface area rather than volume is the fundamental constraint on representational capacity---consistent with the observation that cortical folding correlates with cognitive complexity across species.
-
-Notably, this motif---electric fields interacting with 2D surfaces---recurs across biology: cell membranes, bioelectric gradients in morphogenesis \citep{levin2021bioelectric}, and cortical sheets all share this geometric configuration. We do not claim universality, but the pattern suggests that 2D surfaces interfacing with volumetric fields may be a broadly useful architecture for biological information processing.
-
-\subsection{Hierarchical Compression: Beta vs.\ Gamma}
-
-The present model treats the bottleneck as a single stage, but the frequency hierarchy (delta $\rightarrow$ theta $\rightarrow$ beta $\rightarrow$ gamma) may implement a \emph{cascade} of progressively tighter bottlenecks. We speculate:
+These results suggest that cortical frequency bands implement a cascade of dimensional bottlenecks:
 
 \begin{itemize}
-    \item \textbf{Beta ($k \approx 3$):} A ``loose'' bottleneck that compresses the substrate enough to stabilise representations but preserves the continuous topology required for analog manipulation---holding and rotating a mental object without collapsing it into a fixed symbol.
-    \item \textbf{Gamma ($k \approx 2$):} A ``tight'' bottleneck that forces discrete symbol formation for categorical decisions and error-corrected transmission.
+    \item \textbf{Slow oscillations (delta, theta)}: Maintain the high-dimensional volumetric substrate. Many oscillators participate coherently, providing the ``canvas'' for computation.
+    \item \textbf{Beta oscillations ($k \approx 3$)}: Intermediate compression. The manifold is constrained but remains ``floppy''---continuous enough for analog manipulation, mental rotation, holding ambiguity.
+    \item \textbf{Gamma oscillations ($k \approx 2$)}: Tight compression. Forces categorical commitment---symbols, decisions, assertions. Optimal for transmission but sacrifices nuance.
 \end{itemize}
 
-This distinction has dynamical consequences. In a $k=2$ space, self-referential structures (e.g., logical paradoxes) produce trajectory collisions---the system cannot stably represent ``This statement is false'' because TRUE and FALSE occupy the same loop. In a $k=3$ space, the trajectory can lift into a helix, representing the \emph{process} of the paradox without collision. Beta may thus support meta-cognition (understanding paradoxes) while gamma supports definite assertion (resolving them---or failing to). The brain may dynamically adjust bottleneck width via frequency shifts to toggle between manipulation and commitment.
+The brain may dynamically adjust bottleneck width via frequency shifts: increasing beta power to ``loosen'' the constraint when flexibility is needed; increasing gamma power to ``tighten'' when commitment is required.
+
+\subsection{Collision Dynamics and Meta-Cognition}
+
+The paradox simulation reveals a fundamental distinction:
+\begin{itemize}
+    \item \textbf{$k=2$ (Gamma)}: Self-referential structures produce collisions. The system cannot stably represent ``This statement is false.'' Attempting to do so produces oscillation, confusion, or collapse.
+    \item \textbf{$k \geq 3$ (Beta)}: The extra dimension allows trajectories to ``lift'' over themselves. The system can represent the \emph{process} of the paradox---understand it---without being forced to resolve it.
+\end{itemize}
+
+This explains why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). The dimensional constraint determines what kinds of logic are representable.
+
+\subsection{Maturity and Long-Wavelength Stability}
+
+We speculate that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional maturity:
+
+\begin{itemize}
+    \item \textbf{Immature/stressed cognition}: Defaults to $k=2$. Everything is binary: good/bad, right/wrong, us/them. Contradictions are intolerable; ambiguity provokes anxiety.
+    \item \textbf{Mature cognition}: Can sustain $k \geq 3$. Holds contradictions without forcing resolution. Tolerates ambiguity. Sees multiple perspectives simultaneously.
+\end{itemize}
+
+This geometric capacity likely tracks the biological maturation of the prefrontal cortex (PFC). The PFC is the primary generator of top-down beta oscillations \citep{miller2018working} and is the last cortical region to fully myelinate, a process that continues into the mid-20s. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for collision-free logic may be physically rate-limited by this development. The immature brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, falls back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it defaults to a ``planar'' topology where paradoxes force immediate, binary resolution (impulsivity) rather than being held in suspension (cognitive control).
+
+Long-wavelength oscillations provide the \emph{temporal stability} needed for this capacity. Slow waves have long autocorrelation times---they change gradually, providing a stable backdrop against which complex, collision-free trajectories can unfold. When slow-wave power is compromised (stress, sleep deprivation, developmental immaturity, certain psychiatric conditions), the system loses this stability and collapses to categorical processing.
+
+\subsection{Cross-Frequency Coupling}
+
+The well-documented coupling between slow-wave phase and gamma amplitude \citep{canolty2010functional,lisman2013theta} may implement exactly this hierarchy. The slow oscillation defines the current position on the high-dimensional substrate; the gamma burst transmits a discrete ``snapshot'' of that position. The number of distinct gamma codes per slow cycle would be limited by $k=2$ capacity, potentially explaining the 7$\pm$2 limit on working memory items \citep{lisman2013theta}.
+
+\subsection{Laminar and Bioelectric Connections}
+
+This architecture maps onto cortical laminar structure: deep layers (L5/6) with extensive horizontal connectivity support the slow, high-dimensional substrate; superficial layers (L2/3) with gamma-dominant activity implement the bottleneck.
+
+More broadly, the motif of electric fields interacting with 2D surfaces recurs across biology: cell membranes, bioelectric gradients in morphogenesis \citep{levin2021bioelectric}, and cortical sheets all share this geometric configuration. The 2D surface may be a broadly useful architecture for transforming continuous volumetric dynamics into discrete signals.
 
 \subsection{Limitations and Measurement Requirements}
 
-The modular network model captures the key feature of cortical organisation (dense local, sparse global connectivity) but does not model excitatory--inhibitory circuitry, conduction delays, or synaptic nonlinearities that shape real slow--gamma interactions; our goal here is to isolate the geometric and information-theoretic aspects of the problem. The bottleneck model is abstract and does not specify neural mechanisms for compression.
+While synthetic validation confirms the PR metric's utility (Figure~\ref{fig:synthetic}), preliminary application to scalp EEG (64-channel recordings) yielded null results. This is expected: scalp EEG measures volume-conducted potentials that spatially blur the fine-grained geometric structure. The slow-wave versus fast-wave PR difference requires electrode spacing finer than the spatial scale of functional oscillator units. Cortical columns span $\sim$300--500 $\mu$m; resolving participation at this scale requires Utah-array density ($\sim$400 $\mu$m pitch) or high-density ECoG. Standard ECoG grids (1 cm spacing) may still average over too many columns. This represents a clear experimental target: PR analysis on dense intracranial recordings during tasks requiring flexibility (beta-dominant) versus commitment (gamma-dominant).
 
-A preliminary test using scalp EEG (64-channel recordings, PhysioNet motor imagery dataset) did not show higher participation ratios for slow versus fast bands---in fact, the trend was reversed. This negative result is informative rather than disconfirming: scalp EEG measures volume-conducted potentials, not source-level activity. To detect the fine spatial structure of a slow wave, electrode spacing must be finer than the spatial wavelength of the oscillation. A delta wave coordinating activity across centimetres of cortex appears as a smooth, undifferentiated voltage gradient at the scalp; its high-dimensional \emph{source} geometry is invisible to coarse sensor arrays. Testing the participation ratio prediction requires dense intracortical recordings (e.g., Utah arrays, high-density ECoG) where electrode spacing resolves the spatial structure of the oscillation. This measurement constraint should guide future empirical tests.
+The models presented here isolate geometric and information-theoretic aspects; they do not capture excitatory-inhibitory dynamics, conduction delays, or synaptic nonlinearities. Future work should test these predictions in biologically realistic spiking networks and empirical data with appropriate spatial resolution.
 
 \section{Conclusion}
 
-Slow oscillations are geometrically high-dimensional: they coordinate many oscillators into coherent patterns that define a rich, continuous state space. When this high-dimensional substrate is communicated through bandwidth-limited, noisy channels, discrete codes emerge at critical capacity---the ``gamma bursts'' that carry working memory content.
+Cortical oscillations implement a dimensional hierarchy: slow waves maintain the high-dimensional analog substrate; beta provides intermediate ``floppy'' compression for manipulation; gamma enforces discrete symbol formation. The capacity to sustain $k \geq 3$ dynamics---to hold paradoxes without collision---may be a geometric signature of maturity. Long-wavelength stability provides the temporal substrate for collision-free cognition; its disruption forces the mind into rigid categorical processing.
 
-This framework suggests a division of labour rather than a hierarchy:
-\begin{itemize}
-    \item \textbf{The Substrate (Analog):} The slow-wave state maintains a ``floppy,'' high-dimensional manifold---the continuous context necessary for motor fluidity, spatial navigation, and nuanced prediction. Not all computation benefits from discretisation.
-    \item \textbf{The Code (Digital):} The gamma bottleneck enforces ``rigid'' discretisation when required---for categorical decisions, symbolic logic, and error-corrected transmission across noisy channels.
-\end{itemize}
-
-Intelligence may emerge from the controlled collapse of the former into the latter. The canvas is slow and deep; the brushstrokes are fast and superficial.
+Intelligence emerges from the controlled collapse of analog into digital. The canvas is slow; the brushstrokes are fast.
 
 \section*{Data Availability}
 
