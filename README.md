@@ -51,16 +51,9 @@ python paradox_topology.py
 python real_data_pr.py
 ```
 
-## Citation
+## Status
 
-```bibtex
-@article{todd2025dimensional,
-  author = {Todd, Ian},
-  title = {The Dimensional Hierarchy of Cortical Oscillations: From Analog Substrate to Symbolic Codes},
-  journal = {Journal of Computational Neuroscience},
-  year = {2025}
-}
-```
+Manuscript in preparation. Target journal: Journal of Computational Neuroscience.
 
 ## License
 
