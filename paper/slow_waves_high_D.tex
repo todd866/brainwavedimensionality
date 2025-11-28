@@ -170,12 +170,12 @@ The critical $k \approx 2$ reflects a topological constraint: the input categori
 \subsection{Self-Reference Benefits from $k \geq 3$}
 \label{sec:paradox}
 
-Figure~\ref{fig:paradox} demonstrates collision dynamics. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (the system cannot distinguish ``going TRUE$\rightarrow$FALSE'' from ``returning FALSE$\rightarrow$TRUE''). In 3D, the trajectory forms a helix with zero self-intersections---the system can represent the \emph{process} of the paradox without confusion. A linear autoencoder trained to compress and reconstruct this helix through a $k=2$ bottleneck fails to preserve the time dimension (MSE = 0.31 on time vs.\ 0.008 on position), while $k=3$ achieves perfect reconstruction---confirming that the topological collision is a functional barrier, not merely a visual artefact.
+Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence for the $k \geq 3$ requirement. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (panel A); in 3D, it forms a collision-free helix (panel B). The computational proof is equally stark: a linear autoencoder trained to compress and reconstruct the 3D helix through a $k=2$ bottleneck fails catastrophically on the time dimension (MSE = 0.108), while $k=3$ achieves perfect reconstruction (MSE $< 10^{-6}$; panels C--D). The high error at $k=2$ is \emph{irreducible}: it represents the necessary loss of temporal information to satisfy the planar constraint. No amount of training can resolve the self-intersection.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../figures/fig4_paradox_topology.pdf}
-    \caption{\textbf{In this representation, $k=3$ allows collision-free embedding of self-referential logic.} (A) In 2D, the paradox trajectory collides with itself every cycle. Collisions are defined as point pairs that are spatially close ($< 0.15$ units) but temporally distant ($> 10$ steps). Colour encodes time (dark $\to$ light). (B) In 3D, the trajectory spirals upward (helix), avoiding collision---time provides the escape dimension.}
+    \caption{\textbf{Geometric and computational proof that self-reference benefits from $k \geq 3$.} (A) In 2D, the paradox trajectory collides with itself (1511 intersections; defined as point pairs $<0.15$ units apart but $>10$ steps distant). Colour encodes time. (B) In 3D, the trajectory spirals upward (helix), avoiding collision. (C) Learning dynamics: $k=2$ plateaus at high MSE; $k=3$ converges to zero. (D) Time reconstruction: $k=2$ cannot recover the temporal dimension (red); $k=3$ achieves perfect reconstruction (green).}
     \label{fig:paradox}
 \end{figure}
 
