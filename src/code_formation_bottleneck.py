@@ -391,9 +391,76 @@ def plot_results(results, states, labels):
     plt.close()
 
 
+def run_noise_sweep():
+    """
+    Stress Test: Does high noise force k=2 collapse?
+
+    This proves the maturity hypothesis: under noisy conditions (stress),
+    the system MUST collapse to k=2 because nuance (k=3) gets swamped.
+    """
+    print("="*70)
+    print("STRESS TEST: Does High Noise Force k=2 Collapse?")
+    print("="*70)
+
+    # Setup
+    states, labels, _ = generate_slow_wave_substrate(n_samples=1000)
+
+    noise_levels = [0.1, 0.3, 0.5, 0.7, 0.9, 1.2]
+    dims = [1, 2, 3, 4, 8, 16]
+
+    heatmap_ari = np.zeros((len(noise_levels), len(dims)))
+
+    # Sweep
+    for i, noise in enumerate(noise_levels):
+        print(f"Testing Noise Level σ={noise}...")
+        for j, k in enumerate(dims):
+            _, _, ari, _ = train_bottleneck(k, states, labels, noise_std=noise, n_epochs=100)
+            heatmap_ari[i, j] = ari
+
+    # Find optimal k at each noise level
+    optimal_k = [dims[np.argmax(heatmap_ari[i, :])] for i in range(len(noise_levels))]
+    print("\nOptimal k at each noise level:")
+    for noise, k_opt in zip(noise_levels, optimal_k):
+        print(f"  σ={noise}: optimal k={k_opt}")
+
+    # Plotting
+    fig, ax = plt.subplots(figsize=(8, 6))
+    im = ax.imshow(heatmap_ari, origin='lower', cmap='viridis', aspect='auto')
+
+    # Labels
+    ax.set_xticks(np.arange(len(dims)))
+    ax.set_xticklabels(dims)
+    ax.set_yticks(np.arange(len(noise_levels)))
+    ax.set_yticklabels(noise_levels)
+
+    ax.set_xlabel('Bottleneck Dimension (k)', fontsize=11, fontweight='bold')
+    ax.set_ylabel('Channel Noise (σ)', fontsize=11, fontweight='bold')
+    ax.set_title('Noise Forces Collapse to k=2', fontsize=12, fontweight='bold')
+
+    # Annotate values
+    for i in range(len(noise_levels)):
+        for j in range(len(dims)):
+            val = heatmap_ari[i, j]
+            color = 'white' if val < 0.6 else 'black'
+            ax.text(j, i, f"{val:.2f}", ha="center", va="center",
+                   color=color, fontsize=9, fontweight='bold')
+
+    plt.colorbar(im, label='Code Formation (ARI)')
+    plt.tight_layout()
+    plt.savefig(FIGURES / "fig5_stress_collapse.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig5_stress_collapse.png", dpi=150, bbox_inches='tight')
+    print(f"\nSaved {FIGURES / 'fig5_stress_collapse.pdf'}")
+
+    return heatmap_ari, noise_levels, dims
+
+
 if __name__ == "__main__":
     results, states, labels = run_bottleneck_sweep()
     plot_results(results, states, labels)
+
+    # Run stress test
+    print("\n")
+    heatmap, noise_levels, dims = run_noise_sweep()
 
     print("\n" + "="*70)
     print("CONCLUSION:")

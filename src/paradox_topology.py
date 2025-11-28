@@ -195,11 +195,11 @@ def visualize_paradox_topology():
     recon_k2_time = learning_results[2]['recon'][:, 2]
     recon_k3_time = learning_results[3]['recon'][:, 2]
 
-    ax4.plot(true_time, recon_k2_time, color='#d62728', linewidth=1.5, alpha=0.7,
+    ax4.plot([0, 1], [0, 1], 'k--', linewidth=1, alpha=0.3, label='Perfect')  # Draw first
+    ax4.plot(true_time, recon_k2_time, color='#d62728', linewidth=2, alpha=0.8,
              label='k=2 (fails)')
-    ax4.plot(true_time, recon_k3_time, color='#2ca02c', linewidth=1.5, alpha=0.7,
-             label='k=3 (succeeds)')
-    ax4.plot([0, 1], [0, 1], 'k--', linewidth=1, alpha=0.5, label='Perfect')
+    ax4.plot(true_time, recon_k3_time, color='#2ca02c', linewidth=3, alpha=0.9,
+             label='k=3 (succeeds)', linestyle='-')  # Thicker line, high alpha
     ax4.set_xlabel('True Time (z)', fontsize=11)
     ax4.set_ylabel('Reconstructed Time', fontsize=11)
     ax4.set_title('D. Time Dimension Reconstruction', fontweight='bold', fontsize=12)
