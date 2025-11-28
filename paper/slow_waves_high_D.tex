@@ -23,7 +23,7 @@ Ian Todd\\
 \maketitle
 
 \begin{abstract}
-We propose that cortical oscillations implement a \emph{dimensional hierarchy}: a cascade of progressively tighter information bottlenecks from slow to fast frequencies. Using graph Laplacian analysis, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing the high-dimensional geometric substrate. Using encoder-decoder networks, we show that discrete symbolic codes emerge at a critical bottleneck width of $k=2$, while $k=3$ preserves continuous ``compliant'' dynamics capable of representing self-referential structures without trajectory collision. We argue that this hierarchy maps onto frequency bands: slow oscillations maintain the volumetric analog context; beta ($k \approx 3$) supports manipulation and meta-cognition; gamma ($k \approx 2$) forces categorical commitment. The capacity to sustain $k \geq 3$ dynamics---to hold contradictions without collapsing them---may be a geometric signature of cognitive and emotional maturity. Long-wavelength oscillations provide the temporal stability and geometric depth required for collision-free representations; their disruption forces premature discretisation.
+We propose that cortical oscillations implement a \emph{dimensional hierarchy}: a cascade of progressively tighter information bottlenecks from slow to fast frequencies. Using graph Laplacian analysis, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing the high-dimensional geometric substrate. Using encoder-decoder networks, we show that discrete symbolic codes emerge at a critical bottleneck width of $k=2$, while $k=3$ preserves continuous ``compliant'' dynamics capable of representing self-referential structures without trajectory collision. We propose that this hierarchy maps onto frequency bands: slow oscillations maintain the volumetric analog context; beta ($k \approx 3$) supports manipulation and meta-cognition; gamma ($k \approx 2$) forces categorical commitment. The capacity to sustain $k \geq 3$ dynamics---to hold contradictions without collapsing them---may be a geometric signature of cognitive and emotional maturity. Long-wavelength oscillations provide the temporal stability and geometric depth required for collision-free representations; their disruption forces premature discretisation.
 \end{abstract}
 
 \section{Introduction}
@@ -42,7 +42,7 @@ A slow wave sweeping across cortex may appear ``simple'' at a single electrode b
 
 \subsection{The Hierarchy Hypothesis}
 
-We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality:
+We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality. As a working hypothesis, we suggest the following mapping between bands and effective bottleneck widths:
 
 \begin{center}
 \begin{tabular}{lccc}
@@ -138,7 +138,7 @@ Self-intersections were counted as pairs of trajectory points that are spatially
 
 Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference.
 
-Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR correctly distinguishes global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction.
+Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR correctly distinguishes global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction. (Preliminary application to 64-channel scalp EEG yielded null results, consistent with the spatial-blurring limitations discussed in Section~\ref{sec:limitations}.)
 
 \begin{figure}[ht]
     \centering
@@ -158,7 +158,7 @@ Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR c
 
 Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed, qualitatively stable across seeds). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87).
 
-The critical $k \approx 2$ reflects a topological constraint: the input categories are distinguished by phase relationships (cyclic, $S^1$ topology). Embedding a circle requires at least 2 dimensions. However, as Section~\ref{sec:paradox} demonstrates, $k=3$ becomes essential when trajectories must evolve over time without self-intersection.
+The critical $k \approx 2$ reflects a topological constraint: the input categories are distinguished by phase relationships with $S^1$ (circular) topology. In our construction, they are embedded as a circle in $\mathbb{R}^2$, so a 1-D bottleneck cannot separate them, whereas $k \geq 2$ is sufficient. However, as Section~\ref{sec:paradox} demonstrates, when trajectories must evolve over time without self-intersection, an additional dimension ($k \geq 3$) becomes functionally important.
 
 \begin{figure}[ht]
     \centering
@@ -201,7 +201,7 @@ The paradox simulation reveals a fundamental distinction:
     \item \textbf{$k \geq 3$ (Beta)}: The extra dimension allows trajectories to ``lift'' over themselves. The system can represent the \emph{process} of the paradox---understand it---without being forced to resolve it.
 \end{itemize}
 
-This offers a geometric interpretation of why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). Under this view, the dimensional constraint determines what kinds of logic are representable.
+This offers a geometric interpretation of why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). Other encoding schemes (e.g., discrete state machines) can represent the paradox without an explicit extra spatial dimension; our point is that \emph{continuous geometric} representations of self-reference naturally demand $k \geq 3$.
 
 \subsection{Hypothesis: Maturity and Long-Wavelength Stability}
 
@@ -238,6 +238,7 @@ The framework generates several concrete predictions for future empirical work:
 \end{enumerate}
 
 \subsection{Limitations and Measurement Requirements}
+\label{sec:limitations}
 
 While synthetic validation confirms the PR metric's utility (Figure~\ref{fig:synthetic}), preliminary application to scalp EEG (64-channel recordings) yielded null results. This is expected: scalp EEG measures volume-conducted potentials that spatially blur the fine-grained geometric structure. The slow-wave versus fast-wave PR difference requires electrode spacing finer than the spatial scale of functional oscillator units. Cortical columns span $\sim$300--500 $\mu$m; resolving participation at this scale requires Utah-array density ($\sim$400 $\mu$m pitch) or high-density ECoG. Standard ECoG grids (1 cm spacing) may still average over too many columns. This represents a clear experimental target: PR analysis on dense intracranial recordings during tasks requiring flexibility (beta-dominant) versus commitment (gamma-dominant).
 
