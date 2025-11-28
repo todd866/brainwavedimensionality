@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """
-Laplacian Eigenmodes: Proving Slow Waves are High-Dimensional
+Laplacian Eigenmodes: Participation Ratio vs Frequency
 
-The Core Argument Against Miller's "Low-F = Low-D" Claim:
----------------------------------------------------------
-Earl Miller conflates temporal frequency with geometric dimensionality.
+This simulation demonstrates that slow oscillatory modes engage more oscillators
+than fast modes, contrasting with interpretations that equate low frequency with
+low dimensionality.
 
-Slow oscillations (delta, theta) involve MANY oscillators participating coherently.
-Fast oscillations (gamma) involve FEW oscillators in local bursts.
-
-PARTICIPATION RATIO proves this:
+Key concept: Participation Ratio (PR)
     PR = (Σ|ψ_i|²)² / Σ|ψ_i|⁴
 
 For a mode ψ:
-- PR ≈ N means all oscillators participate equally (high-D)
-- PR ≈ 1 means one oscillator dominates (low-D)
+- PR ≈ N means all oscillators participate equally (spatially extended)
+- PR ≈ 1 means one oscillator dominates (spatially localised)
 
-On a cortical sheet (2D lattice with graph Laplacian):
-- SLOW modes (small eigenvalue) = smooth, many oscillators = HIGH participation
-- FAST modes (large eigenvalue) = localized, few oscillators = LOW participation
-
-This is basic spectral geometry. Miller has it backwards.
+On a graph Laplacian:
+- Small eigenvalue (slow modes) → smooth, spatially extended → HIGH participation
+- Large eigenvalue (fast modes) → localised activity → LOW participation
 
 Author: Ian Todd
 """
@@ -234,11 +229,11 @@ def run_experiment():
     Main experiment: Prove slow waves are high-dimensional.
     """
     print("="*70)
-    print("LAPLACIAN EIGENMODES: Slow Waves are High-Dimensional")
+    print("LAPLACIAN EIGENMODES: Participation Ratio Analysis")
     print("="*70)
     print()
-    print("Miller's claim: Low frequency = Low dimensionality")
-    print("Reality: Low frequency = HIGH participation = HIGH dimensionality")
+    print("Testing: Does low frequency imply low spatial participation?")
+    print("Prediction: Low frequency = HIGH participation (many oscillators)")
     print()
 
     # Run analysis with modular network (more brain-like than lattice)
@@ -260,7 +255,7 @@ def run_experiment():
 
     if corr < 0:
         print("  → CONFIRMED: Slow modes have HIGHER participation (more oscillators)")
-        print("  → Miller's 'low-F = low-D' is BACKWARDS")
+        print("  → Supports: low frequency ≠ low spatial dimensionality")
 
     # Print some examples
     n_modes = len(eigenvalues)
@@ -342,6 +337,7 @@ def plot_results(eigenvalues, participation, freq_normalized, modes, n=50):
 
     ax2.set_ylabel('Mean Participation Ratio', fontsize=10)
     ax2.set_title('B. Slow vs Fast Modes', fontweight='bold', fontsize=11)
+    ax2.set_ylim(0, 900)  # Match Panel A scale, ensure error bars visible
 
     # Add percentage labels (inside bars to avoid title overlap)
     N = modes.shape[0]
@@ -389,14 +385,12 @@ if __name__ == "__main__":
     print("="*70)
     print("""
 Slow oscillations (low eigenvalue, low frequency²) involve MANY oscillators
-acting coherently across the cortical sheet.
+acting coherently across the network.
 
 Fast oscillations (high eigenvalue, high frequency²) involve FEW oscillators
-in localized activity patterns.
+in localised activity patterns.
 
-DIMENSIONALITY IS PARTICIPATION, NOT FREQUENCY.
-
-Miller's "low-F = low-D" conflates temporal simplicity with geometric simplicity.
-A slow wave sweeping across cortex is geometrically HIGH-dimensional precisely
-BECAUSE it coordinates many degrees of freedom simultaneously.
+Geometric dimensionality (spatial participation) differs from temporal complexity.
+A slow wave sweeping across cortex is geometrically high-dimensional precisely
+because it coordinates many degrees of freedom simultaneously.
 """)

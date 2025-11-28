@@ -2,26 +2,22 @@
 """
 Code Formation Bottleneck: High-D Slow Waves → Discrete Gamma Codes
 
-The Complete Picture
---------------------
-Figure 1 showed that slow oscillations are geometrically high-dimensional
-(many oscillators participate). But why does this matter?
+This simulation demonstrates the functional consequence of the dimensional
+hierarchy: discrete symbolic codes emerge when high-dimensional patterns
+are compressed through narrow information bottlenecks.
 
-THIS SIMULATION shows the functional consequence:
+    HIGH-D SLOW ACTIVITY → BOTTLENECK → DISCRETE CODES
 
-    HIGH-D SLOW ACTIVITY → BOTTLENECK → DISCRETE CODES (gamma)
+Key insight: The bottleneck width (k) determines whether the output is
+continuous (k ≥ 3) or forced into discrete clusters (k ≈ 2).
 
-The argument against Miller:
-1. Slow waves are HIGH-D (Fig 1) - they coordinate many oscillators
-2. This high-D manifold is the SUBSTRATE for information
-3. Gamma bursts are the PROJECTION of this high-D state through a low-D channel
-4. Discrete codes EMERGE from this compression (not "bursting = high-D")
+- k=1: Information lost, poor reconstruction
+- k=2: Critical point where discrete codes emerge (peak ARI)
+- k≥3: Continuous representation preserved
 
-Miller thinks: "gamma bursts are high-D because they're fast and complex"
-Reality: "gamma bursts are DISCRETE CODES formed by compressing high-D slow activity"
-
-The gamma burst isn't the information - it's the COMPRESSED REPRESENTATION.
-The slow wave is where the rich, high-D state lives.
+This relates to the proposed frequency hierarchy where gamma-band activity
+(narrow channel) may implement the discretisation bottleneck, while slower
+oscillations maintain the high-dimensional substrate.
 
 Author: Ian Todd
 """
@@ -345,6 +341,15 @@ def plot_results(results, states, labels):
         ax2.scatter(codes_k2[mask, 0], codes_k2[mask, 1],
                    c=[colors[cat]], s=20, alpha=0.6, label=f'Cat {cat+1}')
 
+    # Set axis limits with margin to include all points
+    margin = 0.1
+    x_range = codes_k2[:, 0].max() - codes_k2[:, 0].min()
+    y_range = codes_k2[:, 1].max() - codes_k2[:, 1].min()
+    ax2.set_xlim(codes_k2[:, 0].min() - margin * x_range,
+                 codes_k2[:, 0].max() + margin * x_range)
+    ax2.set_ylim(codes_k2[:, 1].min() - margin * y_range,
+                 codes_k2[:, 1].max() + margin * y_range)
+
     ax2.set_xlabel('Gamma Code Dim 1', fontsize=10)
     ax2.set_ylabel('Gamma Code Dim 2', fontsize=10)
     ax2.set_title('B. Discrete Codes Emerge (k=2)', fontweight='bold')
@@ -394,21 +399,17 @@ if __name__ == "__main__":
     print("CONCLUSION:")
     print("="*70)
     print("""
-The gamma burst is not where the "high-dimensional information" lives.
-The gamma burst is the COMPRESSED CODE - a discrete symbol.
-
-The HIGH-DIMENSIONAL information is in the slow wave substrate:
+The high-dimensional information lives in the slow-wave substrate:
 - 256 oscillators coordinating phase relationships
 - Continuous manifold of possible states
-- Rich structure that needs to be communicated
 
-The BOTTLENECK (limited gamma channel bandwidth + noise) forces discretization.
-Discrete codes EMERGE at the critical bottleneck width where the channel is
+The bottleneck (limited channel bandwidth + noise) forces discretisation.
+Discrete codes emerge at the critical bottleneck width where the channel is
 "just barely sufficient" to distinguish categories.
 
-Miller has it backwards:
-- He thinks gamma = complex = high-D
-- Reality: gamma = compressed = DISCRETE CODES
+Under this view:
+- Slow waves = high-D substrate (many oscillators, continuous)
+- Gamma bursts = compressed codes (discrete symbols)
 
-Slow waves are the high-D substrate. Gamma bursts are the low-D projection.
+The gamma burst represents the compressed output, not the information source.
 """)

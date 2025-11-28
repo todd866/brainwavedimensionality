@@ -26,17 +26,16 @@ We propose that cortical oscillations implement a *dimensional hierarchy*: a cas
 │   ├── slow_waves_high_D.pdf    # Compiled PDF
 │   └── references.bib           # Bibliography
 ├── src/
-│   ├── laplacian_pr.py          # Graph Laplacian participation ratio
-│   ├── code_formation.py        # Bottleneck compression simulation
-│   ├── paradox_topology.py      # Liar's Paradox collision dynamics
-│   ├── paradox_learning.py      # Linear autoencoder proof of k=3 requirement
-│   └── real_data_pr.py          # Synthetic validation
+│   ├── laplacian_modes.py           # Graph Laplacian participation ratio
+│   ├── code_formation_bottleneck.py # Bottleneck compression simulation
+│   ├── paradox_topology.py          # Liar's Paradox + linear autoencoder proof
+│   ├── paradox_learning.py          # Standalone autoencoder experiment
+│   └── real_data_pr.py              # Synthetic validation
 └── figures/
     ├── fig1_laplacian_participation.pdf
     ├── fig2_code_formation_bottleneck.pdf
     ├── fig3_synthetic_pr_validation.pdf
-    ├── fig4_paradox_topology.pdf
-    └── fig4b_paradox_learning.pdf
+    └── fig4_paradox_topology.pdf     # Combined 4-panel figure
 ```
 
 ## Running the Simulations
@@ -47,10 +46,9 @@ pip install numpy scipy matplotlib torch scikit-learn
 
 # Generate all figures
 cd src
-python laplacian_pr.py
-python code_formation.py
+python laplacian_modes.py
+python code_formation_bottleneck.py
 python paradox_topology.py
-python paradox_learning.py
 python real_data_pr.py
 ```
 

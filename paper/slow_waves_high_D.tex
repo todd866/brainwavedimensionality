@@ -42,7 +42,7 @@ A slow wave sweeping across cortex may appear ``simple'' at a single electrode b
 
 \subsection{The Hierarchy Hypothesis}
 
-We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks:
+We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality:
 
 \begin{center}
 \begin{tabular}{lccc}
@@ -90,7 +90,7 @@ The participation ratio (PR), originally developed to quantify localisation in d
     \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
 \end{equation}
 
-PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK. The negative correlation between eigenvalue and PR is robust across network topologies (modular, lattice, small-world).
+PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK. Similar negative correlations between eigenvalue and PR are observed for lattice and small-world topologies (not shown); we report results for the modular network as it better captures cortical column structure.
 
 \textbf{Note on dimensionality terminology.} PR quantifies \emph{spatial participation}---how many oscillators contribute to a given mode---not the intrinsic dimensionality of the state-space manifold (as typically measured by PCA or factor analysis). The latter depends on which modes are simultaneously excited and how they interact. Our claim is about the geometric substrate: slower modes engage more degrees of freedom, providing a higher-capacity ``canvas.''
 
@@ -130,7 +130,7 @@ To demonstrate collision dynamics, we simulated a self-referential process (the 
     \item \textbf{3D embedding}: The trajectory can spiral upward (helix), with time as the third dimension, avoiding self-intersection.
 \end{itemize}
 
-Self-intersections were counted as pairs of trajectory points that are spatially close ($<0.15$ units) but temporally distant ($>10$ steps apart).
+Self-intersections were counted as pairs of trajectory points that are spatially close ($<0.15$ units) but temporally distant ($>10$ steps apart). We also trained a linear autoencoder to compress and reconstruct the 3D helix through $k=2$ versus $k=3$ bottlenecks, quantifying the irreducible reconstruction error when the time dimension is lost.
 
 \section{Results}
 
@@ -201,15 +201,15 @@ The paradox simulation reveals a fundamental distinction:
     \item \textbf{$k \geq 3$ (Beta)}: The extra dimension allows trajectories to ``lift'' over themselves. The system can represent the \emph{process} of the paradox---understand it---without being forced to resolve it.
 \end{itemize}
 
-This explains why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). The dimensional constraint determines what kinds of logic are representable.
+This offers a geometric interpretation of why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). Under this view, the dimensional constraint determines what kinds of logic are representable.
 
 \subsection{Hypothesis: Maturity and Long-Wavelength Stability}
 
 We hypothesise that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional maturity:
 
 \begin{itemize}
-    \item \textbf{Immature/stressed cognition}: Defaults to $k=2$. Everything is binary: good/bad, right/wrong, us/them. Contradictions are intolerable; ambiguity provokes anxiety.
-    \item \textbf{Mature cognition}: Can sustain $k \geq 3$. Holds contradictions without forcing resolution. Tolerates ambiguity. Sees multiple perspectives simultaneously.
+    \item \textbf{Immature/stressed cognition}: Tends toward an effectively $k \approx 2$ regime, favouring binary categorisation. Contradictions may be difficult to tolerate; ambiguity may provoke discomfort.
+    \item \textbf{Mature cognition}: Can sustain $k \geq 3$ dynamics. Holds contradictions without forcing resolution. Tolerates ambiguity. Maintains multiple perspectives simultaneously.
 \end{itemize}
 
 This geometric capacity likely tracks the biological maturation of the prefrontal cortex (PFC). The PFC is the primary generator of top-down beta oscillations \citep{miller2018working,lara2015prefrontal} and is the last cortical region to fully myelinate, a process that continues into the mid-20s \citep{gogtay2004dynamic}. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for collision-free logic may be physically rate-limited by this development. The immature brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, falls back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it defaults to a ``planar'' topology where paradoxes force immediate, binary resolution (impulsivity) rather than being held in suspension (cognitive control).
