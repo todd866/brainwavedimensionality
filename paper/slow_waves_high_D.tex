@@ -205,9 +205,11 @@ This topological argument suggests a functional reason for the laminar, 2D organ
 
 Notably, this motif---electric fields interacting with 2D surfaces---recurs across biology: cell membranes, bioelectric gradients in morphogenesis \citep{levin2021bioelectric}, and cortical sheets all share this geometric configuration. We do not claim universality, but the pattern suggests that 2D surfaces interfacing with volumetric fields may be a broadly useful architecture for biological information processing.
 
-\subsection{Limitations}
+\subsection{Limitations and Measurement Requirements}
 
-The modular network model captures the key feature of cortical organisation (dense local, sparse global connectivity) but does not model excitatory--inhibitory circuitry, conduction delays, or synaptic nonlinearities that shape real slow--gamma interactions; our goal here is to isolate the geometric and information-theoretic aspects of the problem. The bottleneck model is abstract and does not specify neural mechanisms for compression. Future work should test these predictions in biologically realistic spiking network models and empirical neural data.
+The modular network model captures the key feature of cortical organisation (dense local, sparse global connectivity) but does not model excitatory--inhibitory circuitry, conduction delays, or synaptic nonlinearities that shape real slow--gamma interactions; our goal here is to isolate the geometric and information-theoretic aspects of the problem. The bottleneck model is abstract and does not specify neural mechanisms for compression.
+
+A preliminary test using scalp EEG (64-channel recordings, PhysioNet motor imagery dataset) did not show higher participation ratios for slow versus fast bands---in fact, the trend was reversed. This negative result is informative rather than disconfirming: scalp EEG measures volume-conducted potentials, not source-level activity. To detect the fine spatial structure of a slow wave, electrode spacing must be finer than the spatial wavelength of the oscillation. A delta wave coordinating activity across centimetres of cortex appears as a smooth, undifferentiated voltage gradient at the scalp; its high-dimensional \emph{source} geometry is invisible to coarse sensor arrays. Testing the participation ratio prediction requires dense intracortical recordings (e.g., Utah arrays, high-density ECoG) where electrode spacing resolves the spatial structure of the oscillation. This measurement constraint should guide future empirical tests.
 
 \section{Conclusion}
 
