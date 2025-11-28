@@ -106,8 +106,8 @@ def visualize_paradox_topology():
     # Mark TRUE and FALSE regions
     ax1.axhline(0, color='gray', linestyle='--', alpha=0.3)
     ax1.axvline(0, color='gray', linestyle='--', alpha=0.3)
-    ax1.text(0.8, 0.8, 'TRUE', fontsize=10, alpha=0.5)
-    ax1.text(-0.8, -0.8, 'FALSE', fontsize=10, alpha=0.5)
+    ax1.text(1.1, 1.1, 'TRUE', fontsize=10, alpha=0.5, ha='center')
+    ax1.text(-1.1, -1.1, 'FALSE', fontsize=10, alpha=0.5, ha='center')
 
     # Mark collision zone
     circle = plt.Circle((0, 0), 0.2, color='red', alpha=0.2, label='Collision zone')
