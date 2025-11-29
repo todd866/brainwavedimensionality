@@ -29,13 +29,15 @@ We propose that cortical oscillations implement a *dimensional hierarchy*: a cas
 │   ├── laplacian_modes.py           # Graph Laplacian participation ratio
 │   ├── code_formation_bottleneck.py # Bottleneck compression simulation
 │   ├── paradox_topology.py          # Liar's Paradox + linear autoencoder proof
-│   ├── paradox_learning.py          # Standalone autoencoder experiment
 │   └── real_data_pr.py              # Synthetic validation
 └── figures/
-    ├── fig1_laplacian_participation.pdf
-    ├── fig2_code_formation_bottleneck.pdf
-    ├── fig3_synthetic_pr_validation.pdf
-    └── fig4_paradox_topology.pdf     # Combined 4-panel figure
+    ├── fig1_laplacian_participation.pdf   # Figure 1: Laplacian PR
+    ├── fig2_synthetic_pr_validation.pdf   # Figure 2: Synthetic validation
+    ├── fig3_code_formation_bottleneck.pdf # Figure 3: Bottleneck compression
+    ├── fig4_paradox_topology.pdf          # Figure 4: Helix proof
+    ├── fig5_stress_collapse.pdf           # Figure 5: Noise shifts optimal k
+    ├── figS1_laplacian_robustness.pdf     # Figure 6: Robustness across topologies
+    └── figS2_category_sweep.pdf           # Figure 7: Category sweep
 ```
 
 ## Running the Simulations
@@ -54,7 +56,7 @@ python real_data_pr.py
 
 ## Status
 
-Manuscript in preparation. Target journal: Journal of Computational Neuroscience.
+This repository accompanies the manuscript *"The Dimensional Hierarchy of Cortical Oscillations: From Analog Substrate to Symbolic Codes"* (submitted to Journal of Computational Neuroscience).
 
 ## License
 

@@ -213,12 +213,14 @@ def plot_synthetic_results(slow_pr, fast_pr, n_channels):
 
     ax2.set_ylabel('Mean Participation Ratio', fontsize=11)
     ax2.set_title('B. Slow vs Fast Bands', fontweight='bold', fontsize=12)
-    ax2.set_ylim(0, n_channels * 0.8)
+    # Set y-limit to accommodate bars + error bars
+    max_val = max(means[0] + stds[0], means[1] + stds[1])
+    ax2.set_ylim(0, max_val * 1.15)
 
     plt.tight_layout()
-    plt.savefig(FIGURES / "fig3_synthetic_pr_validation.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig3_synthetic_pr_validation.png", dpi=150, bbox_inches='tight')
-    print(f"\nFigure saved to {FIGURES / 'fig3_synthetic_pr_validation.pdf'}")
+    plt.savefig(FIGURES / "fig2_synthetic_pr_validation.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig2_synthetic_pr_validation.png", dpi=150, bbox_inches='tight')
+    print(f"\nFigure saved to {FIGURES / 'fig2_synthetic_pr_validation.pdf'}")
     plt.close()
 
 

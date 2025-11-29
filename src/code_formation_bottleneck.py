@@ -384,9 +384,9 @@ def plot_results(results, states, labels):
     ax3.set_title('C. The Mechanism', fontweight='bold')
 
     # Save
-    plt.savefig(FIGURES / "fig2_code_formation_bottleneck.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig2_code_formation_bottleneck.png", dpi=150, bbox_inches='tight')
-    print(f"\nFigure saved to {FIGURES / 'fig2_code_formation_bottleneck.pdf'}")
+    plt.savefig(FIGURES / "fig3_code_formation_bottleneck.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig3_code_formation_bottleneck.png", dpi=150, bbox_inches='tight')
+    print(f"\nFigure saved to {FIGURES / 'fig3_code_formation_bottleneck.pdf'}")
 
     plt.close()
 
@@ -452,6 +452,82 @@ def run_noise_sweep():
     print(f"\nSaved {FIGURES / 'fig5_stress_collapse.pdf'}")
 
     return heatmap_ari, noise_levels, dims
+
+
+def run_category_sweep():
+    """
+    Sweep over number of categories to verify ARI peak is robust.
+
+    Shows that the peak at k≈2-3 holds across different category counts.
+    """
+    print("\n" + "="*70)
+    print("CATEGORY SWEEP: Testing across different numbers of categories")
+    print("="*70)
+
+    category_counts = [3, 6, 9, 12]
+    bottleneck_dims = [1, 2, 3, 4, 8, 16]
+    n_repeats = 3
+
+    results = {n_cat: {k: [] for k in bottleneck_dims} for n_cat in category_counts}
+
+    for n_cat in category_counts:
+        print(f"\nTesting {n_cat} categories...")
+        for seed in range(n_repeats):
+            torch.manual_seed(seed)
+            np.random.seed(seed)
+
+            # Generate data
+            states, labels, _ = generate_slow_wave_substrate(
+                n_samples=200 * n_cat, n_categories=n_cat
+            )
+
+            for k in bottleneck_dims:
+                # Train bottleneck and get ARI directly
+                _, _, ari, _ = train_bottleneck(k, states, labels, n_epochs=100)
+                results[n_cat][k].append(ari)
+
+    # Find peak k for each category count
+    print("\n" + "-"*70)
+    print("RESULTS: Peak bottleneck width by category count")
+    print("-"*70)
+
+    peak_ks = []
+    for n_cat in category_counts:
+        mean_aris = {k: np.mean(results[n_cat][k]) for k in bottleneck_dims}
+        best_k = max(mean_aris, key=mean_aris.get)
+        best_ari = mean_aris[best_k]
+        peak_ks.append(best_k)
+        print(f"  {n_cat} categories: peak at k={best_k} (ARI={best_ari:.3f})")
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    colors = plt.cm.viridis(np.linspace(0.2, 0.8, len(category_counts)))
+
+    for i, n_cat in enumerate(category_counts):
+        mean_aris = [np.mean(results[n_cat][k]) for k in bottleneck_dims]
+        std_aris = [np.std(results[n_cat][k]) for k in bottleneck_dims]
+
+        ax.errorbar(bottleneck_dims, mean_aris, yerr=std_aris,
+                   marker='o', capsize=3, color=colors[i],
+                   label=f'{n_cat} categories', linewidth=2, markersize=6)
+
+    ax.set_xlabel('Bottleneck Width (k)', fontsize=11)
+    ax.set_ylabel('Code Formation (ARI)', fontsize=11)
+    ax.set_title('Code Formation Across Category Counts', fontweight='bold', fontsize=12)
+    ax.legend()
+    ax.set_xscale('log', base=2)
+    ax.set_xticks(bottleneck_dims)
+    ax.set_xticklabels(bottleneck_dims)
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(FIGURES / "figS2_category_sweep.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "figS2_category_sweep.png", dpi=150, bbox_inches='tight')
+    print(f"\nSupplementary figure saved to {FIGURES / 'figS2_category_sweep.pdf'}")
+    plt.close()
+
+    return results, peak_ks
 
 
 if __name__ == "__main__":

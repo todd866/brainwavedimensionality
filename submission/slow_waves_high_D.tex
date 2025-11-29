@@ -146,14 +146,14 @@ Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR c
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{../figures/fig1_laplacian_participation.pdf}
+    \includegraphics[width=\textwidth]{fig1_laplacian_participation.pdf}
     \caption{\textbf{Slow modes are geometrically high-dimensional.} (A) Participation ratio decreases with eigenvalue ($r = -0.75$). (B) Mean participation for slowest vs fastest modes shows 3-fold difference. (C) Activation distributions: slow modes spread activity broadly.}
     \label{fig:laplacian}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\textwidth]{../figures/fig2_synthetic_pr_validation.pdf}
+    \includegraphics[width=0.85\textwidth]{fig2_synthetic_pr_validation.pdf}
     \caption{\textbf{Synthetic validation confirms PR metric.} (A) PR distributions for slow (2--8 Hz) versus fast (30--50 Hz) bands in synthetic multi-channel data. (B) Mean PR: slow band engages 99\% of channels; fast band engages 42\%. This 2.4-fold difference confirms that the metric correctly identifies global versus local activity when spatial structure is preserved.}
     \label{fig:synthetic}
 \end{figure}
@@ -166,7 +166,7 @@ The critical $k \approx 2$ reflects a \emph{static} topological constraint: the 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{../figures/fig3_code_formation_bottleneck.pdf}
+    \includegraphics[width=\textwidth]{fig3_code_formation_bottleneck.pdf}
     \caption{\textbf{Discrete codes emerge at critical capacity.} (A) Code formation (ARI) peaks at $k \approx 2$--3, reflecting the $S^1$ topology of the phase-defined categories. (B) Bottleneck codes at $k=2$ form six distinct clusters, each interpretable as a proto-symbol. (C) Schematic: high-dimensional slow-wave patterns compress through a noisy bottleneck, forcing discretisation when channel capacity is limited.}
     \label{fig:bottleneck}
 \end{figure}
@@ -178,7 +178,7 @@ Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{../figures/fig4_paradox_topology.pdf}
+    \includegraphics[width=\textwidth]{fig4_paradox_topology.pdf}
     \caption{\textbf{Geometric and computational proof that self-reference benefits from $k \geq 3$.} (A) In 2D, the paradox trajectory collides with itself (1511 intersections; defined as point pairs $<0.15$ units apart but $>10$ steps distant). Colour encodes time. (B) In 3D, the trajectory spirals upward (helix), avoiding collision. (C) Learning dynamics: $k=2$ plateaus at high MSE; $k=3$ converges to zero. (D) Time reconstruction: $k=2$ cannot recover the temporal dimension (red); $k=3$ achieves perfect reconstruction (green).}
     \label{fig:paradox}
 \end{figure}
@@ -189,7 +189,7 @@ Figure~\ref{fig:stress} shows that the optimal bottleneck width depends on chann
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\textwidth]{../figures/fig5_stress_collapse.pdf}
+    \includegraphics[width=0.85\textwidth]{fig5_stress_collapse.pdf}
     \caption{\textbf{Noise forces topological collapse.} Code formation (ARI) heatmap across bottleneck width ($k$) and channel noise ($\sigma$). At low noise (bottom), the system supports higher-dimensional nuance ($k \geq 3$). At high noise (top), optimal coding collapses to $k = 2$: binary categorisation becomes the only robust strategy. This provides a computational mechanism for stress-induced rigid thinking.}
     \label{fig:stress}
 \end{figure}
@@ -285,14 +285,14 @@ The author thanks the Fulcher Lab, University of Sydney, for feedback on an earl
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.9\textwidth]{../figures/figS1_laplacian_robustness.pdf}
+    \includegraphics[width=0.9\textwidth]{figS1_laplacian_robustness.pdf}
     \caption{\textbf{Participation ratio effect depends on network topology.} (A) Correlation between eigenvalue and PR across network types. The negative correlation is strongest for modular networks ($r \approx -0.85$), weaker for lattices ($r \approx -0.22$), and reverses for small-world networks ($r \approx +0.73$). (B) PR ratio (slowest 10 modes / fastest 10 modes) confirms modular networks show the largest slow/fast difference. The effect requires distinct functional modules with sparse inter-module connections---consistent with cortical column architecture.}
     \label{fig:robustness_laplacian}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\textwidth]{../figures/figS2_category_sweep.pdf}
+    \includegraphics[width=0.85\textwidth]{figS2_category_sweep.pdf}
     \caption{\textbf{Code formation peaks at $k \approx 2$--3 across category counts.} ARI versus bottleneck width for different numbers of input categories (3, 6, 9, 12). Regardless of category count, peak code formation occurs at $k = 2$--3, confirming this is a robust feature of the bottleneck architecture rather than an artefact of the specific 6-category construction used in the main text.}
     \label{fig:robustness_categories}
 \end{figure}

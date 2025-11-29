@@ -376,6 +376,104 @@ def plot_results(eigenvalues, participation, freq_normalized, modes, n=50):
     plt.close()
 
 
+def run_robustness_sweep(n_repeats=5):
+    """
+    Sweep across network types and parameters to verify robustness.
+
+    Shows that the negative correlation between eigenvalue and PR
+    holds across different network topologies.
+    """
+    print("\n" + "="*70)
+    print("ROBUSTNESS SWEEP: Testing across network topologies")
+    print("="*70)
+
+    results = []
+
+    # Test different network types
+    for net_type in ['lattice', 'smallworld', 'modular']:
+        for seed in range(n_repeats):
+            np.random.seed(seed)
+            try:
+                eigenvalues, participation, _ = analyze_laplacian_spectrum(
+                    n=50, n_modes=100, network_type=net_type
+                )
+                freq_norm = eigenvalues / eigenvalues.max()
+                r = np.corrcoef(freq_norm, participation)[0, 1]
+
+                # PR ratio: slowest 10 vs fastest 10
+                pr_ratio = participation[:10].mean() / participation[-10:].mean()
+
+                results.append({
+                    'type': net_type,
+                    'seed': seed,
+                    'r': r,
+                    'pr_ratio': pr_ratio
+                })
+                print(f"  {net_type} seed={seed}: r={r:.3f}, PR_ratio={pr_ratio:.2f}")
+            except Exception as e:
+                print(f"  {net_type} seed={seed}: FAILED ({e})")
+
+    # Summary
+    print("\n" + "-"*70)
+    print("SUMMARY:")
+    print("-"*70)
+
+    for net_type in ['lattice', 'smallworld', 'modular']:
+        type_results = [r for r in results if r['type'] == net_type]
+        if type_results:
+            rs = [r['r'] for r in type_results]
+            ratios = [r['pr_ratio'] for r in type_results]
+            print(f"  {net_type:12s}: r = {np.mean(rs):.3f} ± {np.std(rs):.3f}, "
+                  f"PR_ratio = {np.mean(ratios):.2f} ± {np.std(ratios):.2f}")
+
+    # Plot robustness figure
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+
+    # Panel A: Correlation distribution
+    ax1 = axes[0]
+    colors = {'lattice': '#1f77b4', 'smallworld': '#ff7f0e', 'modular': '#2ca02c'}
+    positions = {'lattice': 0, 'smallworld': 1, 'modular': 2}
+
+    for net_type in ['lattice', 'smallworld', 'modular']:
+        type_results = [r for r in results if r['type'] == net_type]
+        rs = [r['r'] for r in type_results]
+        pos = positions[net_type]
+        ax1.boxplot([rs], positions=[pos], widths=0.6,
+                    patch_artist=True,
+                    boxprops=dict(facecolor=colors[net_type], alpha=0.7))
+
+    ax1.set_xticks([0, 1, 2])
+    ax1.set_xticklabels(['Lattice', 'Small-world', 'Modular'])
+    ax1.set_ylabel('Correlation (eigenvalue, PR)')
+    ax1.set_title('A. Correlation Across Topologies', fontweight='bold')
+    ax1.axhline(0, color='gray', linestyle='--', alpha=0.3)
+    ax1.set_ylim(-1, 0.2)
+
+    # Panel B: PR ratio
+    ax2 = axes[1]
+    for net_type in ['lattice', 'smallworld', 'modular']:
+        type_results = [r for r in results if r['type'] == net_type]
+        ratios = [r['pr_ratio'] for r in type_results]
+        pos = positions[net_type]
+        ax2.boxplot([ratios], positions=[pos], widths=0.6,
+                    patch_artist=True,
+                    boxprops=dict(facecolor=colors[net_type], alpha=0.7))
+
+    ax2.set_xticks([0, 1, 2])
+    ax2.set_xticklabels(['Lattice', 'Small-world', 'Modular'])
+    ax2.set_ylabel('PR Ratio (slow/fast)')
+    ax2.set_title('B. Participation Ratio: Slow vs Fast', fontweight='bold')
+    ax2.axhline(1, color='gray', linestyle='--', alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(FIGURES / "figS1_laplacian_robustness.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "figS1_laplacian_robustness.png", dpi=150, bbox_inches='tight')
+    print(f"\nSupplementary figure saved to {FIGURES / 'figS1_laplacian_robustness.pdf'}")
+    plt.close()
+
+    return results
+
+
 if __name__ == "__main__":
     eigenvalues, participation, freq_normalized, modes = run_experiment()
     plot_results(eigenvalues, participation, freq_normalized, modes)
