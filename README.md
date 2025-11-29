@@ -54,6 +54,15 @@ python paradox_topology.py
 python real_data_pr.py
 ```
 
+## Workflow
+
+This project was developed using an AI-assisted workflow:
+- **Primary drafting**: Claude Code (Opus 4.5) for manuscript text, simulations, and figures
+- **Feedback/red-teaming**: GPT-5.1 Pro and Gemini 3 Pro for critical review
+- **Integration**: Claude Code for implementing revisions
+
+The author supervised direction, evaluated outputs, and made final decisions. AI assistance is disclosed in the manuscript's Statements and Declarations.
+
 ## Status
 
 This repository accompanies the manuscript *"The Dimensional Hierarchy of Cortical Oscillations: From Analog Substrate to Symbolic Codes"* (submitted to Journal of Computational Neuroscience).
