@@ -23,8 +23,14 @@ Ian Todd\\
 \maketitle
 
 \begin{abstract}
-Influential work suggests that low-frequency brain oscillations implement ``low-dimensional'' control, while gamma activity supports ``high-dimensional'' information processing. We argue this framing commits a category error by conflating three distinct notions: \emph{substrate dimensionality} (how many oscillators participate coherently), \emph{interface dimensionality} (how many degrees of freedom a readout exposes), and \emph{expressed structure} (the complexity of downstream patterns). Using graph Laplacian analysis on modular networks, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing slow waves as high-dimensional \emph{substrates}---even though they appear smooth through low-dimensional measurement \emph{interfaces}. Using encoder-decoder networks, we demonstrate that different interface widths support qualitatively different computations: $k=2$ produces discrete categorical codes; $k \geq 3$ preserves continuous dynamics capable of representing self-referential structures without cycle aliasing (where distinct timepoints become observationally identical); $k=1$ (rank-1 readout) functions as mode selection rather than representation. We propose that emotion operates as an endogenous rank-1 interface: a low-dimensional readout that ``diffracts'' through coupling matrices to produce system-wide effects---explaining why anger feels like the whole brain agrees. The capacity to sustain high-rank interfaces ($k \geq 3$) despite ongoing rank-1 affective readouts may be a geometric signature of cognitive maturity. Noise degrades interface rank: stress-induced collapse to $k=2$ or rank-1 is not irrationality but an adaptive response when channel capacity is compromised.
+Influential work suggests that low-frequency brain oscillations implement ``low-dimensional'' control, while gamma activity supports ``high-dimensional'' information processing. We argue this framing commits a category error by conflating three distinct notions: \emph{substrate dimensionality} (how many oscillators participate coherently), \emph{interface dimensionality} (how many degrees of freedom a readout exposes), and \emph{expressed structure} (the complexity of downstream patterns). Using graph Laplacian analysis on modular networks, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing slow waves as high-participation \emph{substrates}---even though they appear smooth through low-dimensional measurement \emph{interfaces}. Using encoder-decoder networks, we demonstrate that different interface widths support qualitatively different computations: $k=2$ produces discrete categorical codes; $k \geq 3$ preserves continuous dynamics capable of representing periodic processes without cycle aliasing (where distinct iterations become observationally identical); low-rank readout ($k \approx 1$--3) functions as mode selection rather than representation. We propose that emotion operates as an endogenous low-rank interface: a dimensionally constrained readout that ``diffracts'' through coupling matrices to produce system-wide effects---explaining why strong emotion feels like the whole brain agrees. The capacity to sustain high-rank interfaces ($k \geq 3$) despite ongoing low-rank affective readouts may be a geometric signature of cognitive regulatory capacity. Noise degrades interface rank: stress-induced collapse to $k=2$ or lower is not irrationality but an adaptive response when channel capacity is compromised.
 \end{abstract}
+
+\vspace{0.5em}
+\noindent\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
+\textbf{Terminology note.} Throughout this paper, ``substrate dimensionality'' refers to \emph{spatial participation}---how many oscillators contribute to a mode (measured by participation ratio, PR)---\textbf{not} the intrinsic dimensionality of state-space trajectories (as measured by PCA, factor analysis, or manifold learning). These are distinct quantities that can vary independently: a slow wave may engage many oscillators (high PR) while tracing a simple trajectory (low latent dimension), whereas local gamma bursts may engage few oscillators (low PR) while exhibiting complex dynamics (high latent dimension).
+}}
+\vspace{0.5em}
 
 \noindent\textbf{Keywords:} cortical oscillations, information bottleneck, participation ratio, graph Laplacian, dimensional hierarchy, neural coding
 
@@ -41,6 +47,8 @@ We argue that this apparent contradiction reflects a category error: the field c
     \item \textbf{Interface dimensionality}: How many degrees of freedom are exposed at a readout or measurement---the ``aperture'' through which state is observed or transmitted.
     \item \textbf{Expressed structure}: The complexity of patterns that emerge downstream of an interface---which can be \emph{richer} than the interface rank would suggest.
 \end{enumerate}
+
+\noindent Formally, let the substrate state be $\mathbf{x}(t) \in \mathbb{R}^N$, where $N$ is the number of oscillators. The interface is a projection $\mathbf{y}(t) = \mathbf{W}\mathbf{x}(t)$, where $\mathbf{W}$ is a $k \times N$ matrix with $\text{rank}(\mathbf{W}) = k \ll N$. The expressed structure is a downstream function $\mathbf{z}(t) = F(\mathbf{y}(t))$. The participation ratio (PR) is a property of substrate modes (how many elements of $\mathbf{x}$ contribute); $k$ is a property of the interface (how many dimensions survive projection). These are independent quantities: high-PR modes can project through low-$k$ interfaces, and vice versa.
 
 \textbf{Ontological note.} At the substrate level, cortical activity is naturally modeled as coupled dissipative fields over space (membrane potentials, synaptic currents)---elements of a function space that is formally infinite-dimensional. However, empirical access is necessarily finite-rank: electrodes, imaging, and downstream readouts impose projections that yield an \emph{effective} dimensionality determined by sampling density, noise, and readout architecture. Our use of participation ratio (PR) targets spatial participation of modes within this projected representation, not the ontological dimensionality of the underlying field. We use ``infinite-dimensional'' in the dynamical-systems sense of PDE state spaces, not to claim that measured neural trajectories exhibit arbitrarily high latent dimension.
 
@@ -67,17 +75,17 @@ Gamma & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
 
 The key insight is that \textbf{different bottleneck widths support qualitatively different computations}. At $k=2$, the system is forced to discretise---continuous manifolds collapse into distinct attractor basins (``symbols''). At $k \geq 3$, the system retains enough dimensionality to represent continuous processes, including self-referential structures that would suffer \emph{cycle aliasing} in lower dimensions---where distinct timepoints in a recurring process become observationally indistinguishable.
 
-\subsection{Hypothesis: Maturity as Dimensional Capacity}
+\subsection{Hypothesis: Regulatory Capacity as Dimensional Capacity}
 
-We further hypothesise that the capacity to sustain $k \geq 3$ dynamics---to hold contradictions, ambiguity, and nuance without forcing premature resolution---constitutes a geometric signature of cognitive and emotional maturity. Under this hypothesis, the immature or stressed mind collapses to $k=2$: black/white, good/bad, us/them. The mature mind can inhabit the ``compliant'' space where paradoxes coexist.
+We further hypothesise that the capacity to sustain $k \geq 3$ dynamics---to hold contradictions, ambiguity, and nuance without forcing premature resolution---constitutes a geometric signature of cognitive and emotional \emph{regulatory capacity}. Under this hypothesis, a system with reduced regulatory capacity (whether due to stress, fatigue, or developmental stage) collapses to $k=2$: black/white, good/bad, us/them. A system with high regulatory capacity can inhabit the ``compliant'' space where ambiguity coexists with ongoing processing.
 
-Long-wavelength (slow) oscillations may provide the \emph{temporal stability} required for cycle-aliasing-free representations. When slow-wave power is reduced (stress, sleep deprivation, developmental immaturity), the system may lose the substrate needed to maintain $k \geq 3$ dynamics and default to rigid categorical processing.
+Long-wavelength (slow) oscillations may provide the \emph{temporal stability} required for cycle-aliasing-free representations. When slow-wave power is reduced (stress, sleep deprivation, early developmental stage), the system may lose the substrate needed to maintain $k \geq 3$ dynamics and default to rigid categorical processing. We use ``regulatory capacity'' rather than ``maturity'' to emphasise that this is a state-dependent property, not solely a developmental one.
 
 \section{Methods}
 
 \subsection{Laplacian Eigenmodes and Participation Ratio}
 
-Graph Laplacian eigenmodes provide a natural basis for analysing spatially extended oscillatory patterns \citep{atasoy2016connectome}. Lower eigenvalues correspond to smoother, longer-wavelength modes; higher eigenvalues correspond to more localised, shorter-wavelength modes. Under diffusive dynamics on the graph, eigenvalue $\lambda$ relates to characteristic timescale as $\tau \propto 1/\lambda$; we use normalised eigenvalue as a \emph{smoothness index} (higher $\lambda$ = more localised / shorter-wavelength structural mode).
+Graph Laplacian eigenmodes provide a natural basis for analysing spatially extended oscillatory patterns \citep{atasoy2016connectome}. Lower eigenvalues correspond to smoother, longer-wavelength \emph{spatial} modes; higher eigenvalues correspond to more localised, shorter-wavelength spatial modes. Under diffusive dynamics on the graph, eigenvalue $\lambda$ relates to characteristic timescale as $\tau \propto 1/\lambda$. We use normalised eigenvalue as a \emph{spatial smoothness index}: higher $\lambda$ corresponds to more spatially localised modes (shorter wavelength), not directly to physiological oscillation frequency. The mapping from Laplacian eigenvalue to temporal frequency bands (delta, theta, gamma, etc.) is indirect and approximate; our claim concerns the \emph{geometric availability} of spatial patterns, not a one-to-one eigenvalue-to-Hz correspondence.
 
 \textbf{Relationship to physiological oscillations.} We analyse these \emph{structural} eigenmodes as defining the geometric constraints---the ``manifold capacity''---within which neural dynamics unfold. Laplacian modes are most directly relevant when coupling is approximately diffusive (gap junctions, ephaptic fields, or weak synaptic coupling in the linearised regime). Real neural dynamics involve delays, inhibition, and nonlinearities that can deviate from this basis. However, the Laplacian spectrum defines what spatial patterns are \emph{available} to the network: slow structural modes are geometrically capable of recruiting many oscillators; fast modes are not. Whether physiological rhythms exploit this capacity depends on the dynamics, but the capacity itself is a structural property. Our claim is thus about \emph{geometric substrate availability}, not a direct mapping from eigenvalue to EEG frequency band.
 
@@ -105,9 +113,9 @@ PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when acti
 
 \textbf{Note on dimensionality terminology.} PR quantifies \emph{spatial participation}---how many oscillators contribute to a given mode---not the intrinsic dimensionality of the state-space manifold (as typically measured by PCA, factor analysis, or manifold learning). When we say ``high-dimensional'' in this paper, we mean ``many units participate coherently'' unless otherwise specified. Our claim is about the geometric substrate: slower modes engage more degrees of freedom, providing a higher-capacity ``canvas.''
 
-\subsubsection{Synthetic Time-Series Validation}
+\subsubsection{Synthetic Time-Series Demonstration}
 
-To verify that the participation ratio metric correctly distinguishes global from local activity in time-series data, we generated synthetic multi-channel signals. Slow activity (2--8 Hz) was simulated as a global oscillation with high inter-channel correlation ($r = 0.8$); fast activity (30--50 Hz) was simulated as sparse, uncorrelated bursts. The combined signal was bandpass filtered and PR was computed on amplitude envelopes over 200 ms sliding windows. This establishes that PR correctly identifies global versus local activity when the spatial structure is uncontaminated by volume conduction.
+To demonstrate that the participation ratio metric correctly distinguishes global from local activity in time-series data, we generated synthetic multi-channel signals with known spatial structure. Slow activity (2--8 Hz) was simulated as a global oscillation with high inter-channel correlation ($r = 0.8$); fast activity (30--50 Hz) was simulated as sparse, uncorrelated bursts. The combined signal was bandpass filtered and PR was computed on amplitude envelopes over 200 ms sliding windows. This is a \emph{sanity check}, not a validation: the synthetic signals are constructed to have the property we then recover. The demonstration confirms that PR behaves as expected when spatial structure is uncontaminated by volume conduction, but does not test the metric's robustness to realistic mixing or noise.
 
 \subsection{Bottleneck Compression}
 
@@ -132,13 +140,13 @@ The encoder-decoder compresses 256-D input through bottlenecks of width $k \in \
 
 Training used Adam (lr = $10^{-3}$) for 150 epochs, minimising MSE reconstruction error. Code formation was measured by Adjusted Rand Index (ARI) between $k$-means clustering of bottleneck codes and true labels.
 
-\subsection{Paradox Topology Simulation}
+\subsection{Cycle Aliasing in Periodic Processes}
 
-To demonstrate cycle aliasing, we simulated a self-referential process (the Liar's Paradox: TRUE $\rightarrow$ FALSE $\rightarrow$ TRUE $\rightarrow$ ...) as a continuous trajectory and embedded it in 2D versus 3D spaces:
+To demonstrate cycle aliasing, we simulated a periodic re-entrant process---a system that repeatedly cycles through similar states while accumulating context (e.g., working memory maintenance, predictive coding loops, or iterative evaluation). The Liar's Paradox (TRUE $\rightarrow$ FALSE $\rightarrow$ TRUE $\rightarrow$ ...) provides an intuitive example, but the geometric point applies to any periodic process with hidden cycle index. We embedded the trajectory in 2D versus 3D spaces:
 
 \begin{itemize}
     \item \textbf{2D embedding}: The cyclic trajectory traces a closed loop; under linear readout, distinct phases of successive cycles map to the same 2D location (cycle aliasing).
-    \item \textbf{3D embedding}: The trajectory spirals upward (helix), with time as the third dimension, separating successive cycles.
+    \item \textbf{3D embedding}: The trajectory spirals upward (helix), with time/context as the third dimension, separating successive cycles.
 \end{itemize}
 
 Self-intersections were counted as pairs of trajectory points that are spatially close ($<0.15$ units) but temporally distant ($>10$ steps apart). We also trained a linear autoencoder to compress and reconstruct the 3D helix through $k=2$ versus $k=3$ bottlenecks, quantifying the reconstruction error under linear (PCA-like) interface constraints.
@@ -149,27 +157,27 @@ We present three linked results that together demonstrate the dimensional hierar
 
 \subsection{Slow Modes Have Higher Participation}
 
-Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the slow$>$fast PR difference should be strongest in association cortex with pronounced modularity.
+Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the slow$>$fast PR difference should be strongest in association cortex with pronounced modularity. \textbf{Limitation}: These results are from a single network realisation; future work should verify robustness across an ensemble of random network draws and modularity parameter sweeps.
 
-Synthetic time-series validation (Figure~\ref{fig:synthetic}) confirms that PR correctly distinguishes global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction. (Preliminary application to 64-channel scalp EEG yielded null results, consistent with the spatial-blurring limitations discussed in Section~\ref{sec:limitations}.)
+The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms that PR behaves as expected, distinguishing global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction. (Preliminary application to 64-channel scalp EEG yielded null results, consistent with the spatial-blurring limitations discussed in Section~\ref{sec:limitations}.)
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{figures/fig1_laplacian_participation.pdf}
-    \caption{\textbf{Slow modes are geometrically high-dimensional.} (A) Participation ratio decreases with eigenvalue ($r = -0.75$). (B) Mean participation for slowest vs fastest modes shows 3-fold difference. (C) Activation distributions: slow modes spread activity broadly.}
+    \caption{\textbf{Long-wavelength modes engage more oscillators.} (A) Participation ratio decreases with normalised Laplacian eigenvalue (spatial smoothness index; $r = -0.75$). Lower eigenvalue = spatially smoother mode. (B) Mean participation for smoothest (``slow'') vs most localised (``fast'') modes shows 3-fold difference. (C) Activation distributions: spatially smooth modes spread activity broadly across the network.}
     \label{fig:laplacian}
 \end{figure}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/fig2_synthetic_pr_validation.pdf}
-    \caption{\textbf{Synthetic validation confirms PR metric.} (A) PR distributions for slow (2--8 Hz) versus fast (30--50 Hz) bands in synthetic multi-channel data. (B) Mean PR: slow band engages 99\% of channels; fast band engages 42\%. This 2.4-fold difference confirms that the metric correctly identifies global versus local activity when spatial structure is preserved.}
+    \caption{\textbf{Synthetic demonstration of PR metric behaviour.} (A) PR distributions for slow (2--8 Hz) versus fast (30--50 Hz) bands in synthetic multi-channel data with known spatial structure. (B) Mean PR: slow band engages 99\% of channels; fast band engages 42\%. This 2.4-fold difference is a sanity check confirming that PR behaves as expected when spatial structure is preserved. It does not validate the metric against realistic mixing or noise.}
     \label{fig:synthetic}
 \end{figure}
 
 \subsection{Discrete Codes Emerge at $k=2$}
 
-Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed, qualitatively stable across seeds). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87).
+Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87). \textbf{Limitation}: These results are from a single random seed; future work should report variability across seeds and compare against a linear (PCA-based) baseline to isolate the contribution of nonlinear encoding.
 
 The critical $k \approx 2$ reflects a \emph{static} topological constraint: the input categories are distinguished by phase relationships with $S^1$ (circular) topology. In our construction, they are embedded as a circle in $\mathbb{R}^2$, so a 1-D bottleneck cannot separate them, whereas $k \geq 2$ is sufficient for static classification. However, as Section~\ref{sec:paradox} demonstrates, when \emph{dynamical} trajectories must evolve over time without cycle aliasing, an additional dimension ($k \geq 3$) becomes functionally important under linear readout---the distinction between ``enough dimensions to separate categories'' and ``enough dimensions to preserve process-state distinctness across cycles.''
 
@@ -180,17 +188,17 @@ The critical $k \approx 2$ reflects a \emph{static} topological constraint: the 
     \label{fig:bottleneck}
 \end{figure}
 
-\subsection{Self-Reference Benefits from $k \geq 3$}
+\subsection{Periodic Processes Require $k \geq 3$ to Avoid Cycle Aliasing}
 \label{sec:paradox}
 
-Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence for the $k \geq 3$ requirement under linear interface constraints. The Liar's Paradox trajectory produces 1511 self-intersections when confined to 2D (panel A); in 3D, it forms a helix that separates successive cycles (panel B). The computational illustration is equally clear: a linear autoencoder trained to compress and reconstruct the 3D helix through a $k=2$ bottleneck fails on the time dimension (MSE = 0.108), while $k=3$ achieves near-perfect reconstruction (MSE $< 10^{-6}$; panels C--D).
+Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence for the $k \geq 3$ requirement under linear interface constraints. A periodic re-entrant trajectory (illustrated with the Liar's Paradox as an intuitive example) produces 1511 self-intersections when confined to 2D (panel A); in 3D, it forms a helix that separates successive cycles (panel B). The computational illustration is equally clear: a linear autoencoder trained to compress and reconstruct the 3D helix through a $k=2$ bottleneck fails on the time/context dimension (MSE = 0.108), while $k=3$ achieves near-perfect reconstruction (MSE $< 10^{-6}$; panels C--D).
 
-The key insight is \emph{cycle aliasing}: under a linear (PCA-like) interface that discards the time dimension, distinct timepoints in the recurring cycle become observationally identical. The system cannot distinguish ``going TRUE$\to$FALSE'' from ``going FALSE$\to$TRUE'' because both map to the same 2D location. A nonlinear decoder could, in principle, encode the cycle index in fewer dimensions---but this would require explicitly representing a monotonic time-like variable. Our claim is that \emph{linear} readouts (which approximate many biological interfaces) require $k \geq 3$ to preserve process-state distinctness across cycles.
+The key insight is \emph{cycle aliasing}: under a linear (PCA-like) interface that discards the context dimension, distinct phases of successive cycles become observationally identical. The system cannot distinguish ``first pass through state A'' from ``second pass through state A'' because both map to the same 2D location. A nonlinear decoder could, in principle, encode the cycle index in fewer dimensions---but this would require explicitly representing a monotonic context variable. Our claim is that \emph{linear} readouts (which approximate many biological interfaces) require $k \geq 3$ to preserve process-state distinctness across cycles. The Liar's Paradox is merely an illustrative example; the geometric constraint applies to any periodic process with hidden cycle index (working memory refresh, predictive coding, re-entrant evaluation).
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{figures/fig4_paradox_topology.pdf}
-    \caption{\textbf{Self-reference benefits from $k \geq 3$ under linear interface constraints.} (A) In 2D, the paradox trajectory suffers cycle aliasing (1511 intersections; point pairs $<0.15$ units apart but $>10$ steps distant). Colour encodes time. (B) In 3D, the trajectory forms a helix that separates successive cycles. (C) Learning dynamics: $k=2$ plateaus at high MSE; $k=3$ converges to near-zero. (D) Time reconstruction: $k=2$ cannot recover the temporal dimension because cycle aliasing forces distinct timepoints to the same bottleneck state (red); $k=3$ preserves process-state distinctness (green).}
+    \caption{\textbf{Periodic processes require $k \geq 3$ to avoid cycle aliasing.} (A) In 2D, a periodic re-entrant trajectory (Liar's Paradox as illustrative example) suffers cycle aliasing (1511 intersections; point pairs $<0.15$ units apart but $>10$ steps distant). Colour encodes time/context. (B) In 3D, the trajectory forms a helix that separates successive cycles. (C) Learning dynamics: $k=2$ plateaus at high MSE; $k=3$ converges to near-zero. (D) Context reconstruction: $k=2$ cannot recover the cycle index because aliasing forces distinct contexts to the same bottleneck state (red); $k=3$ preserves process-state distinctness (green). The geometric point generalises beyond paradoxes to any periodic process with hidden cycle index.}
     \label{fig:paradox}
 \end{figure}
 
@@ -209,31 +217,31 @@ Figure~\ref{fig:stress} shows that the optimal bottleneck width depends on chann
 
 The bottleneck experiments (Section~3.2) demonstrate that $k=2$ produces discrete categorical codes while $k \geq 3$ preserves continuous dynamics. But there is a third regime below $k=2$ that merits separate treatment: the \emph{rank-1 interface}, where readout is restricted to a single dimension.
 
-\subsection{Affective Readout as Rank-1 Projection}
+\subsection{Affective Readout as Low-Rank Projection}
 
-Consider a high-dimensional brain state $\mathbf{x} \in \mathbb{R}^N$ being read out through a single measurement direction:
+Consider a high-dimensional brain state $\mathbf{x} \in \mathbb{R}^N$ being read out through a low-rank projection:
 \begin{equation}
-    e = \mathbf{u}^\top \mathbf{x} \in \mathbb{R}
-    \label{eq:rank1}
+    \mathbf{e} = \mathbf{U}^\top \mathbf{x} \in \mathbb{R}^m, \quad m \in \{1, 2, 3\}
+    \label{eq:lowrank}
 \end{equation}
-where $\mathbf{u}$ is a unit vector defining the readout axis. This is a rank-1 interface---the narrowest possible ``slit.'' A single scalar $e$ is extracted from the entire $N$-dimensional state.
+where $\mathbf{U}$ is an $N \times m$ matrix defining the readout subspace. This is a low-rank interface---a narrow ``slit'' through which the high-dimensional state is observed. In the limiting case of $m=1$, a single scalar is extracted from the entire $N$-dimensional state.
 
-We propose that \textbf{emotion functions as an endogenous rank-1 readout channel}. The affective system monitors a global state (arousal, valence, threat level) without representing its high-dimensional structure \citep{barrett2017emotions,damasio1994descartes}. The ``anger axis'' or ``fear axis'' is a direction in neural state space, and the emotional signal is the projection onto that axis.
+We propose that \textbf{emotion functions as an endogenous low-rank readout channel}, typically operating in the range $m \approx 1$--3. The affective system monitors global state (arousal, valence, threat level) without representing its full high-dimensional structure \citep{barrett2017emotions,damasio1994descartes}. Under normal conditions, affective readout may be rank-2 or rank-3, preserving some distinctions (valence $\times$ arousal, or approach/avoid $\times$ certainty). Under urgency or stress, affective readout may collapse toward rank-1: a single dominant axis (safe/dangerous, good/bad) that overwhelms finer distinctions.
 
-Equation~\ref{eq:rank1} is a minimal mathematical idealisation of how interoceptive and limbic circuits compress distributed cortical states into low-dimensional affective signals \citep{craig2009interoception,kleckner2017arousal}. The body's readout of the brain is dimensionally constrained---you feel \emph{one} level of alertness, not 10,000 separate measurements.
+Equation~\ref{eq:lowrank} is a mathematical idealisation of how interoceptive and limbic circuits compress distributed cortical states into low-dimensional affective signals \citep{craig2009interoception,kleckner2017arousal}. The body's readout of the brain is dimensionally constrained---you feel a \emph{few} integrated dimensions of state (alertness, valence, motivation), not 10,000 separate measurements.
 
 \subsection{Diffraction: Low-Rank Readout, High-Rank Effect}
 
-What happens after the rank-1 readout? The scalar $e$ does not simply pass to motor output; it modulates the entire system:
+What happens after a low-rank affective readout? The signal does not simply pass to motor output; it modulates the entire system:
 \begin{equation}
-    \mathbf{x}' = \mathbf{x} + g(e) \cdot \mathbf{A}\mathbf{x}
+    \mathbf{x}' = \mathbf{x} + g(\mathbf{e}) \cdot \mathbf{A}\mathbf{x}
     \label{eq:diffraction}
 \end{equation}
-where $g(e)$ is a nonlinear gain function (e.g., sigmoidal, with saturation) and $\mathbf{A}$ is a coupling matrix that broadly recruits attention, memory, motor planning, and interpretive circuits.
+where $g(\mathbf{e})$ is a nonlinear gain function of the low-rank affective signal and $\mathbf{A}$ is a coupling matrix that broadly recruits attention, memory, motor planning, and interpretive circuits.
 
-This is \emph{cognitive diffraction}: the rank-1 signal ``diffracts'' through the coupling structure to produce system-wide effects. Just as light through a narrow slit produces rich diffraction fringes, the low-dimensional emotional readout produces complex, coordinated downstream patterns.
+This is \emph{cognitive diffraction}: the low-rank signal ``diffracts'' through the coupling structure to produce system-wide effects. Just as light through a narrow slit produces rich diffraction fringes, the low-dimensional emotional readout produces complex, coordinated downstream patterns.
 
-This explains why anger \emph{feels} like the whole brain agrees. The rank-1 readout (``this is threatening'') recruits a coherent policy across subsystems: attention narrows, memory retrieval biases toward threat-relevant episodes, motor planning shifts toward fight-or-flight, interpretation of ambiguous stimuli shifts toward hostile. The richness is real---but it emerges \emph{downstream} of the slit, not upstream.
+This explains why strong emotion \emph{feels} like the whole brain agrees. A low-rank readout (approaching rank-1 under urgency: ``this is threatening'') recruits a coherent policy across subsystems: attention narrows, memory retrieval biases toward threat-relevant episodes, motor planning shifts toward fight-or-flight, interpretation of ambiguous stimuli shifts toward hostile. The richness is real---but it emerges \emph{downstream} of the slit, not upstream.
 
 \subsection{The Tri-Level Regime}
 
@@ -244,28 +252,28 @@ We can now distinguish three interface types with qualitatively different comput
 \toprule
 \textbf{Interface Type} & \textbf{Rank} & \textbf{Function} & \textbf{Example} \\
 \midrule
-Affective readout & $k = 1$ (+ broadcast) & Mode selection & Fear, anger, arousal \\
+Affective readout & $k \approx 1$--3 (low-rank) & Mode selection, policy broadcast & Fear, anger, arousal \\
 Categorical bottleneck & $k = 2$ & Discrete symbols & Decisions, labels, assertions \\
 Compliant manifold & $k \geq 3$ & Analog manipulation & Reasoning, meta-cognition \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-The key insight is that \textbf{rank-1 interfaces are not simplified versions of rank-2 interfaces}. They serve a different function: not representing content but \emph{selecting the manifold on which content is processed}. Emotion picks which attractor landscape the system inhabits; schemas determine where on that landscape the trajectory can go.
+The key insight is that \textbf{low-rank affective interfaces are not simplified versions of categorical interfaces}. They serve a different function: not representing content but \emph{selecting the manifold on which content is processed}. Emotion picks which attractor landscape the system inhabits; schemas determine where on that landscape the trajectory can go. Under stress or urgency, affective readout collapses toward rank-1, producing the ``whole brain agrees'' phenomenology of strong emotion.
 
 \subsection{Noise Reduces Interface Rank}
 
-The stress simulation (Figure~\ref{fig:stress}) showed that noise shifts the optimal bottleneck from $k \geq 3$ toward $k = 2$. We now extend this logic: under extreme noise or resource constraint, even $k = 2$ may be unstable, and the system collapses further to rank-1 dominance.
+The stress simulation (Figure~\ref{fig:stress}) showed that noise shifts the optimal bottleneck from $k \geq 3$ toward $k = 2$. We now extend this logic: under extreme noise or resource constraint, even $k = 2$ may be unstable, and the system collapses further toward rank-1 dominance.
 
-This provides a mechanistic account of affect domination under stress. The stressed or fatigued brain cannot maintain the channel capacity for nuanced schemas ($k \geq 3$) or even categorical distinctions ($k = 2$). It defaults to a single-axis readout: good/bad, safe/dangerous, fight/flee. This is not irrationality---it is the adaptive response when information-theoretic constraints make higher-rank interfaces unreliable.
+This provides a mechanistic account of affect domination under stress. The stressed or fatigued brain cannot maintain the channel capacity for nuanced schemas ($k \geq 3$) or even categorical distinctions ($k = 2$). It defaults to a low-rank readout approaching a single dominant axis: good/bad, safe/dangerous, fight/flee. This is not irrationality---it is the adaptive response when information-theoretic constraints make higher-rank interfaces unreliable.
 
-\subsection{Maturity as Rank Maintenance}
+\subsection{Regulatory Capacity as Rank Maintenance}
 
-We can now sharpen the maturity hypothesis from Section~1.3. Cognitive and emotional maturity is the capacity to \textbf{sustain high-rank interfaces despite low-rank readouts}.
+We can now sharpen the hypothesis from Section~1.3. Cognitive and emotional \emph{regulatory capacity} is the capacity to \textbf{sustain high-rank interfaces despite low-rank affective readouts}.
 
-The mature mind experiences emotion (rank-1 readout) without having behaviour dominated by it. It can acknowledge ``I feel angry'' while maintaining the $k \geq 3$ dynamics needed to reason about the anger, consider its sources, and modulate response. The immature or dysregulated mind collapses: the rank-1 emotional signal directly governs behaviour, bypassing the schema layer entirely.
+A system with high regulatory capacity experiences emotion (low-rank readout) without having behaviour dominated by it. It can register ``threat detected'' while maintaining the $k \geq 3$ dynamics needed to reason about the threat, consider its sources, and modulate response. A system with low regulatory capacity collapses: the low-rank emotional signal directly governs behaviour, bypassing the schema layer entirely.
 
-This is not about suppressing emotion but about \emph{maintaining interface rank under affective pressure}. The slow-wave substrate (high PR, high-dimensional) provides the stability reservoir. When that reservoir is depleted (sleep deprivation, chronic stress, developmental immaturity), the system cannot buffer the rank-1 signal, and cognition collapses to affective mode.
+This is not about suppressing emotion but about \emph{maintaining interface rank under affective pressure}. The slow-wave substrate (high PR, high participation) provides the stability reservoir. When that reservoir is depleted (sleep deprivation, chronic stress, early developmental stage), the system cannot buffer the low-rank signal, and cognition collapses toward affective mode. We use ``regulatory capacity'' rather than ``maturity'' to avoid normative connotations; the capacity varies with state (fatigue, stress) as well as development.
 
 \section{Discussion}
 
@@ -289,12 +297,12 @@ A central premise of the ``low-dimensional subspace'' hypothesis \citep{miller20
 
 We argue that this inference commits the category error identified in Section~1.1: \textbf{Miller and colleagues measure interface dimensionality and mistake it for substrate dimensionality}. Their electrodes act as low-dimensional projections of a high-dimensional state. The smooth, coherent signals they observe are precisely what concentration of measure predicts when a high-dimensional system is read out through a limited channel. The regularity is a property of the measurement, not the measured.
 
-In high-dimensional probability theory, the \emph{concentration of measure} phenomenon dictates that as the dimensionality $N$ of a system increases, the probability mass concentrates rapidly around specific regions---for instance, the equator of a hypersphere \citep{gorban2018blessing}. Consider the brain state as a vector $\mathbf{x}$ in a high-dimensional state space $\mathbb{R}^N$ where $N$ is the number of neurons ($N \approx 10^{11}$). If we assume neural activity is bounded (e.g., on a hypersphere $S^{N-1}$), L\'{e}vy's lemma states that for any Lipschitz continuous function $f: S^{N-1} \to \mathbb{R}$ (such as a local field potential measurement), the probability that $f(\mathbf{x})$ deviates from its median $M_f$ by more than $\epsilon$ decays exponentially with $N$:
+In high-dimensional probability theory, the \emph{concentration of measure} phenomenon dictates that as the effective dimensionality of a system increases, the probability mass concentrates rapidly around specific regions---for instance, the equator of a hypersphere \citep{gorban2018blessing}. The relevant quantity is not the raw number of neurons ($N \approx 10^{11}$) but the \emph{effective} number of independently contributing units, which we approximate by the participation ratio (PR). Consider a mode with PR $= N_{\text{eff}}$: the state effectively lives in $\mathbb{R}^{N_{\text{eff}}}$, not $\mathbb{R}^N$. If we assume neural activity is bounded (e.g., on a hypersphere $S^{N_{\text{eff}}-1}$), L\'{e}vy's lemma states that for any Lipschitz continuous function $f$ (such as a local field potential measurement), the probability that $f(\mathbf{x})$ deviates from its median $M_f$ by more than $\epsilon$ decays exponentially with $N_{\text{eff}}$:
 \begin{equation}
-    P(|f(\mathbf{x}) - M_f| \geq \epsilon) \leq 2 \exp(-C N \epsilon^2)
+    P(|f(\mathbf{x}) - M_f| \geq \epsilon) \leq 2 \exp(-C \cdot N_{\text{eff}} \cdot \epsilon^2)
     \label{eq:levy}
 \end{equation}
-where $C$ is a constant depending on the Lipschitz constant of $f$. Crucially, our Laplacian analysis (Section~3.1) demonstrates that slow oscillations maximise this effective $N$ (high Participation Ratio), whereas fast oscillations restrict it. Therefore, slow waves are uniquely subject to the stabilising effects of concentration of measure, appearing smooth and ``low-dimensional'' precisely because they are built from the largest possible number of coordinated units.
+where $C$ is a constant depending on the Lipschitz constant of $f$. Crucially, our Laplacian analysis (Section~3.1) demonstrates that slow oscillations maximise $N_{\text{eff}}$ (high PR), whereas fast oscillations restrict it. Therefore, slow waves are uniquely subject to the stabilising effects of concentration of measure, appearing smooth and ``low-dimensional'' precisely because they are built from the largest possible number of coordinated units. The raw neuron count is irrelevant; what matters is how many units participate coherently in a given mode.
 
 This implies that in a truly high-dimensional substrate, macroscopic measurements will essentially \emph{always} appear smooth and deterministic---not because the underlying system is simple, but because the massive dimensionality forces the system into a statistical ``shell'' of stability. The apparent low-dimensionality is a property of the \emph{measurement projection}, not the intrinsic topology of the substrate.
 
@@ -308,26 +316,26 @@ Notably, recent work from the same laboratory \citep{chen2026spatial} provides e
 
 \subsection{Cycle Aliasing and Meta-Cognition}
 
-The paradox simulation reveals a fundamental distinction:
+The cycle aliasing simulation reveals a fundamental distinction:
 \begin{itemize}
-    \item \textbf{$k=2$ (Gamma)}: Self-referential structures produce cycle aliasing. Under a linear readout, the system cannot distinguish which phase of the paradox cycle it occupies---``going TRUE$\to$FALSE'' looks identical to ``going FALSE$\to$TRUE.'' This ambiguity produces oscillation, confusion, or collapse.
-    \item \textbf{$k \geq 3$ (Beta)}: The extra dimension separates successive cycles. The system can represent the \emph{process} of the paradox---understand it---without being forced to resolve it.
+    \item \textbf{$k=2$ (Gamma)}: Periodic re-entrant processes produce cycle aliasing. Under a linear readout, the system cannot distinguish which iteration of a recurring process it occupies---successive passes through similar states map to the same low-dimensional representation. This ambiguity can produce oscillation, confusion, or forced premature resolution.
+    \item \textbf{$k \geq 3$ (Beta)}: The extra dimension separates successive cycles. The system can represent the \emph{process}---track where it is in an ongoing evaluation---without collapsing distinct iterations.
 \end{itemize}
 
-This offers a geometric interpretation of why we can \emph{think about} paradoxes (beta, meta-cognition) but cannot \emph{decide} them (gamma, assertion). Other encoding schemes (e.g., discrete state machines with explicit cycle counters) can represent the paradox without an extra spatial dimension; our point is that \emph{continuous geometric} representations under linear interface constraints naturally require $k \geq 3$ to preserve process-state distinctness.
+This offers a geometric interpretation of meta-cognitive capacity: the ability to hold a process ``in mind'' while it unfolds, rather than being forced to immediate resolution. The Liar's Paradox is an extreme case where resolution is impossible; more mundane examples include working memory maintenance (distinguishing current from previous items), predictive coding (distinguishing prediction from observation), and deliberation (distinguishing tentative from committed states). Other encoding schemes (e.g., discrete state machines with explicit cycle counters) can represent these distinctions without an extra spatial dimension; our point is that \emph{continuous geometric} representations under linear interface constraints naturally require $k \geq 3$ to preserve process-state distinctness.
 
-\subsection{Hypothesis: Maturity and Long-Wavelength Stability}
+\subsection{Hypothesis: Regulatory Capacity and Long-Wavelength Stability}
 
-We hypothesise that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional maturity:
+We hypothesise that the capacity to sustain $k \geq 3$ dynamics constitutes a geometric signature of cognitive and emotional regulatory capacity:
 
 \begin{itemize}
-    \item \textbf{Immature/stressed cognition}: Tends toward an effectively $k \approx 2$ regime, favouring binary categorisation. Contradictions may be difficult to tolerate; ambiguity may provoke discomfort.
-    \item \textbf{Mature cognition}: Can sustain $k \geq 3$ dynamics. Holds contradictions without forcing resolution. Tolerates ambiguity. Maintains multiple perspectives simultaneously.
+    \item \textbf{Reduced regulatory capacity} (stress, fatigue, early development): Tends toward an effectively $k \approx 2$ regime, favouring binary categorisation. Contradictions may be difficult to tolerate; ambiguity may provoke discomfort or forced resolution.
+    \item \textbf{High regulatory capacity}: Can sustain $k \geq 3$ dynamics. Holds contradictions without forcing resolution. Tolerates ambiguity. Maintains multiple perspectives simultaneously.
 \end{itemize}
 
-This geometric capacity likely tracks the biological maturation of the prefrontal cortex (PFC). The PFC is the primary generator of top-down beta oscillations \citep{miller2018working,lara2015prefrontal} and is the last cortical region to fully myelinate, a process that continues into the mid-20s \citep{gogtay2004dynamic}. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for cycle-aliasing-free processing may be physically rate-limited by this development. The immature brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, falls back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it defaults to a ``planar'' topology where paradoxes force immediate, binary resolution (impulsivity) rather than being held in suspension (cognitive control).
+This geometric capacity likely tracks both state (fatigue, stress) and development. The prefrontal cortex (PFC) is the primary generator of top-down beta oscillations \citep{miller2018working,lara2015prefrontal} and is the last cortical region to fully myelinate, a process that continues into the mid-20s \citep{gogtay2004dynamic}. The ability to sustain the ``helical'' $k \geq 3$ dynamics required for cycle-aliasing-free processing may be physically rate-limited by this development. A developing brain, lacking the myelinated bandwidth to sustain stable high-dimensional beta loops, may fall back on earlier-developing, sensory-driven gamma circuitry ($k=2$). Consequently, it may default to a ``planar'' topology where ambiguity forces immediate, binary resolution rather than being held in suspension.
 
-Long-wavelength oscillations provide the \emph{temporal stability} needed for this capacity. Slow waves have long autocorrelation times---they change gradually, providing a stable backdrop against which complex, cycle-separated trajectories can unfold. Slow-wave sleep, in particular, is critical for memory consolidation \citep{diekelmann2010memory}; its disruption impairs not only declarative memory but also the cognitive flexibility that depends on integrated representations. When slow-wave power is compromised (stress, sleep deprivation, developmental immaturity, certain psychiatric conditions), the system loses this stability and collapses to categorical processing. The noise simulation (Figure~\ref{fig:stress}) formalises this intuition: as channel signal-to-noise ratio degrades, the optimal bottleneck width shifts from $k \geq 3$ (nuance) to $k = 2$ (binary contrast). This is not a failure of the system but an adaptive response---binary codes are simply more robust to noise. While we model this mathematically as additive noise, biologically it corresponds to any reduction in effective channel capacity: synaptic fatigue, inhibitory dysregulation, or information overload where input complexity exceeds processing bandwidth. These links to psychiatric conditions are speculative and would require careful, dedicated clinical studies to test.
+Long-wavelength oscillations provide the \emph{temporal stability} needed for this capacity. Slow waves have long autocorrelation times---they change gradually, providing a stable backdrop against which complex, cycle-separated trajectories can unfold. Slow-wave sleep, in particular, is critical for memory consolidation \citep{diekelmann2010memory}; its disruption impairs not only declarative memory but also the cognitive flexibility that depends on integrated representations. When slow-wave power is compromised (stress, sleep deprivation, early developmental stage), the system loses this stability and collapses to categorical processing. The noise simulation (Figure~\ref{fig:stress}) formalises this intuition: as channel signal-to-noise ratio degrades, the optimal bottleneck width shifts from $k \geq 3$ (nuance) to $k = 2$ (binary contrast). This is not a failure of the system but an adaptive response---binary codes are simply more robust to noise. While we model this mathematically as additive noise, biologically it corresponds to any reduction in effective channel capacity: synaptic fatigue, inhibitory dysregulation, or information overload where input complexity exceeds processing bandwidth. These developmental and clinical links are speculative hypotheses that would require careful, dedicated empirical studies to test.
 
 \subsection{Cross-Frequency Coupling}
 
