@@ -16,7 +16,7 @@
 │   ├── paradox_learning.py
 │   └── real_data_pr.py
 ├── figures/                 # Original figures
-└── _revision/               # R1 revision (in progress)
+└── _revision/               # Working manuscript (ongoing improvements)
     ├── slow_waves_high_D.tex
     ├── slow_waves_high_D.pdf
     ├── references.bib
@@ -25,7 +25,7 @@
 
 **Root folder** contains the original submission to JCN (Nov 2025) and all associated code/figures.
 
-**`_revision/`** contains the R1 revision addressing reviewer feedback:
+**`_revision/`** contains the working manuscript with improvements made since submission:
 - Added terminology box clarifying participation ratio ≠ latent dimension
 - Reframed eigenvalue as "spatial smoothness index" (not frequency)
 - Reframed synthetic PR test as "demonstration" not "validation"
