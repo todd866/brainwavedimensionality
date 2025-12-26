@@ -25,7 +25,7 @@ Author: Ian Todd
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from sklearn.metrics import adjusted_rand_score
+from sklearn.metrics import adjusted_rand_score, silhouette_score
 from sklearn.cluster import KMeans
 
 import torch
@@ -213,7 +213,13 @@ def train_bottleneck(bottleneck_dim, states, labels, noise_std=0.3,
 
     ari = adjusted_rand_score(labels.numpy(), cluster_labels)
 
-    return codes_np, error, ari, model
+    # Compute silhouette score (intrinsic cluster quality)
+    if bottleneck_dim >= 2 and len(np.unique(cluster_labels)) > 1:
+        sil = silhouette_score(codes_np, cluster_labels)
+    else:
+        sil = 0.0
+
+    return codes_np, error, ari, sil, model
 
 
 def run_bottleneck_sweep():
@@ -246,6 +252,7 @@ def run_bottleneck_sweep():
         'bottleneck_dim': [],
         'error': [],
         'ari': [],
+        'silhouette': [],
         'codes': []
     }
 
@@ -253,16 +260,17 @@ def run_bottleneck_sweep():
     print("-"*70)
 
     for k in bottleneck_dims:
-        codes, error, ari, model = train_bottleneck(
+        codes, error, ari, sil, model = train_bottleneck(
             k, states, labels, noise_std=noise_std
         )
 
         results['bottleneck_dim'].append(k)
         results['error'].append(error)
         results['ari'].append(ari)
+        results['silhouette'].append(sil)
         results['codes'].append(codes)
 
-        print(f"  Bottleneck k={k:2d} | Error={error:.4f} | ARI={ari:.3f}")
+        print(f"  Bottleneck k={k:2d} | Error={error:.4f} | ARI={ari:.3f} | Silhouette={sil:.3f}")
 
     # Find critical point
     best_idx = np.argmax(results['ari'])
@@ -278,6 +286,7 @@ def run_bottleneck_sweep():
              bottleneck_dims=results['bottleneck_dim'],
              errors=results['error'],
              aris=results['ari'],
+             silhouettes=results['silhouette'],
              critical_k=critical_k,
              states=states.numpy(),
              labels=labels.numpy())
@@ -414,7 +423,7 @@ def run_noise_sweep():
     for i, noise in enumerate(noise_levels):
         print(f"Testing Noise Level σ={noise}...")
         for j, k in enumerate(dims):
-            _, _, ari, _ = train_bottleneck(k, states, labels, noise_std=noise, n_epochs=100)
+            _, _, ari, _, _ = train_bottleneck(k, states, labels, noise_std=noise, n_epochs=100)
             heatmap_ari[i, j] = ari
 
     # Find optimal k at each noise level
@@ -483,7 +492,7 @@ def run_category_sweep():
 
             for k in bottleneck_dims:
                 # Train bottleneck and get ARI directly
-                _, _, ari, _ = train_bottleneck(k, states, labels, n_epochs=100)
+                _, _, ari, _, _ = train_bottleneck(k, states, labels, n_epochs=100)
                 results[n_cat][k].append(ari)
 
     # Find peak k for each category count
@@ -603,7 +612,7 @@ def run_seed_robustness(n_seeds=10, noise_std=0.5):
 
         for k in bottleneck_dims:
             # Nonlinear (autoencoder)
-            _, _, ari_nl, _ = train_bottleneck(k, states, labels, noise_std=noise_std)
+            _, _, ari_nl, _, _ = train_bottleneck(k, states, labels, noise_std=noise_std)
             nonlinear_results[k].append(ari_nl)
 
             # Linear (PCA)

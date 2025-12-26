@@ -23,16 +23,16 @@ Ian Todd\\
 \maketitle
 
 \begin{abstract}
-Influential work suggests that low-frequency brain oscillations implement ``low-dimensional'' control, while gamma activity supports ``high-dimensional'' information processing. We argue this framing commits a category error by conflating three distinct notions: \emph{substrate dimensionality} (how many oscillators participate coherently), \emph{interface dimensionality} (how many degrees of freedom a readout exposes), and \emph{expressed structure} (the complexity of downstream patterns). Using graph Laplacian analysis on modular networks, we show that slow eigenmodes engage substantially more oscillators than fast modes ($r = -0.75$), establishing slow waves as high-participation \emph{substrates}---even though they appear smooth through low-dimensional measurement \emph{interfaces}. Using encoder-decoder networks, we demonstrate that different interface widths support qualitatively different computations: $k=2$ produces discrete categorical codes; $k \geq 3$ preserves continuous dynamics capable of representing periodic processes without cycle aliasing (where distinct iterations become observationally identical); low-rank readout ($k \approx 1$--3) functions as mode selection rather than representation. We propose that emotion operates as an endogenous low-rank interface: a dimensionally constrained readout that ``diffracts'' through coupling matrices to produce system-wide effects---explaining why strong emotion feels like the whole brain agrees. The capacity to sustain high-rank interfaces ($k \geq 3$) despite ongoing low-rank affective readouts may be a geometric signature of cognitive regulatory capacity. Noise degrades interface rank: stress-induced collapse to $k=2$ or lower is not irrationality but an adaptive response when channel capacity is compromised.
+Influential work suggests that low-frequency brain oscillations implement ``low-dimensional'' control, while gamma activity supports ``high-dimensional'' information processing. We argue this framing conflates three distinct notions that can vary independently: \emph{substrate participation} (how many oscillators contribute coherently), \emph{interface dimensionality} (how many degrees of freedom a readout exposes), and \emph{expressed structure} (the complexity of downstream patterns). Using graph Laplacian analysis on modular networks, we show that spatially smooth eigenmodes engage substantially more oscillators than localized modes ($r = -0.75$), establishing long-wavelength activity as high-participation \emph{substrates}---even though they appear smooth through low-dimensional measurement \emph{interfaces}. Using encoder-decoder networks, we demonstrate that different interface widths support qualitatively different computations: $k=2$ produces discrete categorical codes; $k \geq 3$ preserves continuous dynamics capable of representing periodic processes without cycle aliasing (where distinct iterations become observationally identical); low-rank readout ($k \approx 1$--3) functions as mode selection rather than representation. We propose that emotion operates as an endogenous low-rank interface: a dimensionally constrained readout that ``diffracts'' through coupling matrices to produce system-wide effects---explaining why strong emotion feels like the whole brain agrees. The capacity to sustain high-rank interfaces ($k \geq 3$) despite ongoing low-rank affective readouts may be a geometric signature of cognitive regulatory capacity. Noise degrades interface rank: stress-induced collapse to $k=2$ or lower is not irrationality but an adaptive response when channel capacity is compromised.
 \end{abstract}
 
 \vspace{0.5em}
 \noindent\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
-\textbf{Terminology note.} Throughout this paper, ``substrate dimensionality'' refers to \emph{spatial participation}---how many oscillators contribute to a mode (measured by participation ratio, PR)---\textbf{not} the intrinsic dimensionality of state-space trajectories (as measured by PCA, factor analysis, or manifold learning). These are distinct quantities that can vary independently: a slow wave may engage many oscillators (high PR) while tracing a simple trajectory (low latent dimension), whereas local gamma bursts may engage few oscillators (low PR) while exhibiting complex dynamics (high latent dimension).
+\textbf{Terminology note.} We use \emph{substrate participation} (measured by participation ratio, PR, or effective count $N_{\text{eff}}$) to describe how many oscillators contribute coherently to a mode. This is \textbf{not} the same as latent trajectory dimensionality (PCA, manifold learning). These quantities vary independently: a slow wave may engage many oscillators (high $N_{\text{eff}}$) while tracing a simple trajectory, whereas local gamma bursts may engage few oscillators (low $N_{\text{eff}}$) while exhibiting complex dynamics.
 }}
 \vspace{0.5em}
 
-\noindent\textbf{Keywords:} cortical oscillations, information bottleneck, participation ratio, graph Laplacian, dimensional hierarchy, neural coding
+\noindent\textbf{Keywords:} cortical oscillations, compression bottleneck, participation ratio, graph Laplacian, dimensional hierarchy, neural coding
 
 \section{Introduction}
 
@@ -40,38 +40,51 @@ Influential work suggests that low-frequency brain oscillations implement ``low-
 
 Influential work on oscillatory dynamics in prefrontal cortex suggests that different frequency bands serve distinct computational roles \citep{miller2018working,lundqvist2016gamma}. Low-frequency oscillations are often characterised as ``low-dimensional'' coordinating signals, while gamma activity is associated with ``high-dimensional'' information processing \citep{bastos2015visual}. Meanwhile, large-scale neural recordings reveal that population activity can occupy surprisingly high-dimensional spaces \citep{cunningham2014dimensionality,stringer2019spontaneous}.
 
-We argue that this apparent contradiction reflects a category error: the field conflates three distinct notions of dimensionality that can systematically come apart:
+This architecture has been formalised in the reservoir computing framework, which models local cortical dynamics as a fixed recurrent ``substrate'' providing high-dimensional mixed-selectivity dynamics, with learning confined to low-dimensional readouts \citep{enel2016reservoir,maass2002liquid}. We adopt this substrate/interface distinction but focus on how frequency-specific bottleneck widths shape what computations are geometrically possible.
+
+We argue that this apparent contradiction dissolves once we recognise that the literature often treats several distinct quantities interchangeably:
 
 \begin{enumerate}
-    \item \textbf{Substrate dimensionality}: How many degrees of freedom participate coherently in the underlying neural state---the ``canvas'' on which computation occurs.
-    \item \textbf{Interface dimensionality}: How many degrees of freedom are exposed at a readout or measurement---the ``aperture'' through which state is observed or transmitted.
+    \item \textbf{Substrate participation ($N_{\text{eff}}$)}: How many oscillators contribute coherently to the underlying neural state---the ``canvas'' on which computation occurs, quantified by participation ratio (PR).
+    \item \textbf{Interface dimensionality ($k$)}: How many degrees of freedom are exposed at a readout or measurement---the ``aperture'' through which state is observed or transmitted.
     \item \textbf{Expressed structure}: The complexity of patterns that emerge downstream of an interface---which can be \emph{richer} than the interface rank would suggest.
 \end{enumerate}
 
-\noindent Formally, let the substrate state be $\mathbf{x}(t) \in \mathbb{R}^N$, where $N$ is the number of oscillators. The interface is a projection $\mathbf{y}(t) = \mathbf{W}\mathbf{x}(t)$, where $\mathbf{W}$ is a $k \times N$ matrix with $\text{rank}(\mathbf{W}) = k \ll N$. The expressed structure is a downstream function $\mathbf{z}(t) = F(\mathbf{y}(t))$. The participation ratio (PR) is a property of substrate modes (how many elements of $\mathbf{x}$ contribute); $k$ is a property of the interface (how many dimensions survive projection). These are independent quantities: high-PR modes can project through low-$k$ interfaces, and vice versa. This independence echoes the classical distinction in dynamical systems between geometric properties of attractors (dimension, support) and statistical properties of measures over them (entropy, information rate)---quantities that can vary independently \citep{eckmann1985ergodic}.
+\noindent Formally, let the substrate state be $\mathbf{x}(t) \in \mathbb{R}^N$, where $N$ is the number of oscillators. The interface is a projection $\mathbf{y}(t) = \mathbf{W}\mathbf{x}(t)$, where $\mathbf{W}$ is a $k \times N$ matrix with $\text{rank}(\mathbf{W}) = k \ll N$. The expressed structure is a downstream function $\mathbf{z}(t) = F(\mathbf{y}(t))$. The participation ratio (PR) is a property of substrate modes (how many elements of $\mathbf{x}$ contribute); $k$ is a property of the interface (how many dimensions survive projection). These are independent quantities: high-PR modes can project through low-$k$ interfaces, and vice versa.
+
+\textbf{What implements W biologically?} The projection matrix $\mathbf{W}$ is not a single anatomical structure but can arise from several mechanisms:
+\begin{itemize}
+    \item \textbf{Anatomical bottleneck}: Sparse long-range projections (e.g., thalamic relay, prefrontal output pathways) physically limit the number of independent channels available for downstream readout.
+    \item \textbf{Synchrony gating}: Neurons coherent with an oscillatory rhythm transmit effectively; incoherent activity is suppressed by inhibitory interneurons, creating an effective low-rank subspace defined by phase alignment.
+    \item \textbf{Neuromodulatory gain field}: Global neuromodulators (dopamine, norepinephrine) impose low-dimensional gain patterns across cortex, weighting activity in a rank-constrained manner.
+    \item \textbf{Laminar architecture}: Feedforward (layer 2/3 $\to$ layer 4) and feedback (layer 5/6) pathways sample cortical columns differently, each defining a distinct low-rank projection.
+\end{itemize}
+The key point is that $k$---the effective interface rank---is a tunable property of neural circuits, not a fixed anatomical constant. This independence echoes the classical distinction in dynamical systems between geometric properties of attractors (dimension, support) and statistical properties of measures over them (entropy, information rate)---quantities that can vary independently \citep{eckmann1985ergodic}.
 
 \textbf{Ontological note.} At the substrate level, cortical activity is naturally modeled as coupled dissipative fields over space (membrane potentials, synaptic currents)---elements of a function space that is formally infinite-dimensional. However, empirical access is necessarily finite-rank: electrodes, imaging, and downstream readouts impose projections that yield an \emph{effective} dimensionality determined by sampling density, noise, and readout architecture. Our use of participation ratio (PR) targets spatial participation of modes within this projected representation, not the ontological dimensionality of the underlying field. We use ``infinite-dimensional'' in the dynamical-systems sense of PDE state spaces, not to claim that measured neural trajectories exhibit arbitrarily high latent dimension.
 
 The key insight, borrowed from wave optics, is that \textbf{dimensional collapse at an interface does not destroy degrees of freedom---it forces them to reappear in conjugate coordinates}. When light passes through a narrow slit (a 1D spatial constraint), it diffracts into a rich angular pattern. The diffraction fringes are not created by the slit; they are \emph{revealed} by it, as hidden phase relationships become legible. Similarly, a low-dimensional neural readout can produce system-wide structure by recruiting many downstream processes---what we call ``cognitive diffraction.''
 
-This reframing resolves the apparent paradox. A slow wave sweeping across cortex may appear ``simple'' at a single electrode (low interface dimensionality) but coordinates thousands of oscillators into coherent phase relationships (high substrate dimensionality). The smoothness is not evidence of simplicity; it is the expected signature of concentration of measure in high-dimensional systems. Conversely, a gamma burst may exhibit complex temporal structure but engage only a small cortical population---genuinely low substrate dimensionality, despite high-frequency content.
+This reframing resolves the apparent paradox. A slow wave sweeping across cortex may appear ``simple'' at a single electrode (low interface dimensionality) but coordinates thousands of oscillators into coherent phase relationships (high substrate participation, $N_{\text{eff}} \gg 1$). The smoothness is not evidence of simplicity; it is the expected signature of averaging across many coherent units. Conversely, a gamma burst may exhibit complex temporal structure but engage only a small cortical population---genuinely low substrate participation, despite high-frequency content.
 
 \subsection{The Hierarchy Hypothesis}
 
-We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of information bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality. As a working hypothesis, we suggest the following mapping between bands and effective bottleneck widths:
+We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of compression bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality. As a working hypothesis, we suggest the following mapping between bands and the two key metrics:
 
 \begin{center}
-\textbf{Table: Working hypothesis---frequency bands as bottleneck regimes}\\[0.5em]
-\begin{tabular}{lccc}
+\textbf{Table: Working hypothesis---frequency bands as dimensional regimes}\\[0.5em]
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Band} & \textbf{Bottleneck} & \textbf{Topology} & \textbf{Function} \\
+\textbf{Band} & \textbf{Participation ($N_{\text{eff}}$)} & \textbf{Interface ($k$)} & \textbf{Topology} & \textbf{Function} \\
 \midrule
-Delta/Theta & $k \gg 3$ & Volumetric & Raw substrate \\
-Beta & $k \approx 3$ & Compliant manifold & Manipulation, meta-cognition \\
-Gamma & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
+Delta/Theta & High & (substrate, not interface) & Volumetric & Raw analog substrate \\
+Beta & Moderate & $k \approx 3$ & Compliant manifold & Manipulation, meta-cognition \\
+Gamma & Low & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\noindent Note: $N_{\text{eff}}$ (participation ratio) describes how many oscillators engage coherently---the ``canvas.'' $k$ (interface rank) describes the effective dimensionality of a downstream readout---the ``aperture.'' Delta/theta activity primarily provides substrate; the interface rank $k$ applies when downstream circuits read out from this substrate.
 
 The key insight is that \textbf{different bottleneck widths support qualitatively different computations}. At $k=2$, the system is forced to discretise---continuous manifolds collapse into distinct attractor basins (``symbols''). At $k \geq 3$, the system retains enough dimensionality to represent continuous processes, including self-referential structures that would suffer \emph{cycle aliasing} in lower dimensions---where distinct timepoints in a recurring process become observationally indistinguishable.
 
@@ -109,9 +122,9 @@ The participation ratio (PR), originally developed to quantify localisation in d
     \text{PR}(\psi) = \frac{1}{\sum_i |\psi_i|^4}, \quad \text{with } \sum_i |\psi_i|^2 = 1.
 \end{equation}
 
-PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK. The negative correlation between eigenvalue and PR is strongest for modular networks ($r \approx -0.85$) and weaker for simple lattices ($r \approx -0.22$); small-world networks (Watts-Strogatz with random rewiring but no modular structure) show a reversed pattern ($r \approx +0.73$; see Appendix, Figure~\ref{fig:robustness_laplacian}). This topology dependence is itself a prediction: the slow$>$fast PR effect requires distinct functional modules with sparse inter-module connections. Cortical connectivity is both small-world \emph{and} modular \citep{sporns2016modular}---the modular structure, not the small-world property per se, drives the effect. We therefore predict that the PR hierarchy should be strongest in association cortex (pronounced columnar modularity) and weaker in early sensory areas (more homogeneous connectivity).
+PR $\approx N$ when all oscillators contribute equally; PR $\approx 1$ when activity is confined to a single oscillator. We computed the 150 smallest eigenpairs using ARPACK. The negative correlation between eigenvalue and PR is strongest for modular networks ($r \approx -0.85$) and weaker for simple lattices ($r \approx -0.22$); small-world networks (Watts-Strogatz with random rewiring but no modular structure) show a reversed pattern ($r \approx +0.73$; see Appendix, Figure~\ref{fig:robustness_laplacian}). This topology dependence is itself a prediction: the smooth$>$localized PR effect requires distinct functional modules with sparse inter-module connections. Cortical connectivity is both small-world \emph{and} modular \citep{sporns2016modular}---the modular structure, not the small-world property per se, drives the effect. We therefore predict that the PR hierarchy should be strongest in association cortex (pronounced columnar modularity) and weaker in early sensory areas (more homogeneous connectivity).
 
-\textbf{Note on dimensionality terminology.} PR quantifies \emph{spatial participation}---how many oscillators contribute to a given mode---not the intrinsic dimensionality of the state-space manifold (as typically measured by PCA, factor analysis, or manifold learning). When we say ``high-dimensional'' in this paper, we mean ``many units participate coherently'' unless otherwise specified. Our claim is about the geometric substrate: slower modes engage more degrees of freedom, providing a higher-capacity ``canvas.''
+\textbf{Note on dimensionality terminology.} PR quantifies \emph{spatial participation}---how many oscillators contribute to a given mode---not the intrinsic dimensionality of the state-space manifold (as typically measured by PCA, factor analysis, or manifold learning). When we say ``high-dimensional'' in this paper, we mean ``many units participate coherently'' unless otherwise specified. Our claim is about the geometric substrate: smoother modes engage more degrees of freedom, providing a higher-capacity ``canvas.''
 
 \subsubsection{Synthetic Time-Series Demonstration}
 
@@ -119,7 +132,7 @@ To demonstrate that the participation ratio metric correctly distinguishes globa
 
 \subsection{Bottleneck Compression}
 
-The information bottleneck principle \citep{tishby2000information} formalises the trade-off between compression and preservation of task-relevant information. We use encoder-decoder networks to explore how bottleneck dimensionality affects code formation.
+Compression bottlenecks trade off between dimensionality reduction and information preservation. Inspired by the information bottleneck principle \citep{tishby2000information}, we use encoder-decoder networks to explore how bottleneck dimensionality $k$ affects code formation. (We do not optimise the IB Lagrangian directly; rather, we train on reconstruction MSE with additive channel noise, treating IB as motivation rather than objective.)
 
 \subsubsection{Category Construction}
 
@@ -153,13 +166,15 @@ Self-intersections were counted as pairs of trajectory points that are spatially
 
 \section{Results}
 
-We present three linked results that together demonstrate the dimensional hierarchy. First, we show that slow modes are geometrically high-dimensional---they engage many oscillators coherently (Section~3.1). Second, we show that a narrow bottleneck acting on this substrate naturally produces discrete codes at $k \approx 2$--3 (Section~3.2). Third, we demonstrate that $k \geq 3$ is required to represent self-referential dynamics without cycle aliasing under linear interface constraints (Section~3.3). Finally, we show that increased noise shifts the optimal bottleneck width downward, providing a mechanism for stress-induced categorical collapse (Section~3.4).
+We present three linked results that together demonstrate the dimensional hierarchy. First, we show that smooth (long-wavelength) modes are geometrically high-dimensional---they engage many oscillators coherently (Section~3.1). Second, we show that a narrow bottleneck acting on this substrate naturally produces discrete codes at $k \approx 2$--3 (Section~3.2). Third, we demonstrate that $k \geq 3$ is required to represent self-referential dynamics without cycle aliasing under linear interface constraints (Section~3.3). Finally, we show that increased noise shifts the optimal bottleneck width downward, providing a mechanism for stress-induced categorical collapse (Section~3.4).
 
-\subsection{Slow Modes Have Higher Participation}
+\subsection{Smooth Modes Have Higher Participation}
 
-Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the slow$>$fast PR difference should be strongest in association cortex with pronounced modularity. Ensemble analysis over 50 random network realisations confirms robustness: $r = -0.858 \pm 0.027$ (mean $\pm$ sd), with slow modes engaging $6.4 \pm 1.2\times$ more oscillators than fast modes (Appendix, Figure~\ref{fig:ensemble_robustness}).
+Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): smoother modes engage substantially more oscillators. The smoothest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the most localized 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the smooth$>$localized PR difference should be strongest in association cortex with pronounced modularity. Ensemble analysis over 50 random network realisations confirms robustness: $r = -0.858 \pm 0.027$ (mean $\pm$ sd), with smooth modes engaging $6.4 \pm 1.2\times$ more oscillators than localized modes (Appendix, Figure~\ref{fig:ensemble_robustness}).
 
 The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms that PR behaves as expected, distinguishing global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction. (Preliminary application to 64-channel scalp EEG yielded null results, consistent with the spatial-blurring limitations discussed in Section~\ref{sec:limitations}.)
+
+\textbf{Validation on real human functional connectivity.} To test whether the smooth$>$localized PR pattern holds beyond synthetic modular networks, we computed the Laplacian spectrum of group-average functional connectivity derived from 30-subject resting-state fMRI (nilearn development dataset; Schaefer 100-region parcellation). This is not anatomical structural connectivity; it tests whether the spectral participation pattern appears in an empirical brain-derived network. The result shows the predicted pattern: smooth modes engage significantly more regions than localized modes ($r = -0.50$, $p < 0.001$). Smooth modes (lowest 10 eigenvalues) engage 9.1 regions on average; localized modes (highest 10 eigenvalues) engage 2.8 regions---a $3.2\times$ difference (Figure~\ref{fig:real_connectome}). The effect is weaker than in idealized modular simulations ($r = -0.75$), likely because real functional connectivity includes long-range correlations and rich-club hubs that distribute participation. Nevertheless, the direction and statistical significance of the effect confirms that the modular network predictions hold in real human brain connectivity. This result is robust to preprocessing choices: positive-only weights, thresholded graphs (top 20--50\% of edges), and normalized Laplacian all yield negative correlations ($r = -0.45$ to $-0.62$; Appendix, Figure~\ref{fig:connectome_robustness}).
 
 \begin{figure}[ht]
     \centering
@@ -175,9 +190,16 @@ The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms th
     \label{fig:synthetic}
 \end{figure}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_real_connectome_pr.pdf}
+    \caption{\textbf{Real human functional connectivity validates the smooth$>$localized participation pattern.} (A) Participation ratio versus normalised Laplacian eigenvalue in group-average functional connectivity from 30-subject resting-state fMRI (Schaefer 100 parcellation; absolute correlation values). Smooth modes (low eigenvalue) engage significantly more regions than localized modes ($r = -0.50$). (B) Mean participation: smooth modes engage $3.2\times$ more regions than localized modes (9.1 vs 2.8). The effect is weaker than idealized modular simulations but confirms the qualitative prediction in an empirical brain-derived network.}
+    \label{fig:real_connectome}
+\end{figure}
+
 \subsection{Discrete Codes Emerge at $k=2$}
 
-Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87). Seed robustness analysis across 10 random initialisations confirms the peak at $k \approx 2$--3: ARI $= 0.89 \pm 0.02$ (mean $\pm$ sd) for the nonlinear autoencoder. A linear PCA baseline achieves even higher ARI ($0.93 \pm 0.01$), indicating that the $k = 2$--3 peak reflects the geometric structure of the input manifold rather than learned nonlinear features (Appendix, Figure~\ref{fig:seed_robustness}).
+Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87). Silhouette score, an intrinsic measure of cluster separation, confirms the pattern: it peaks at $k=2$ (silhouette = 0.48) and declines monotonically as $k$ increases, indicating that the latent space is most cleanly clustered at low bottleneck widths. Seed robustness analysis across 10 random initialisations confirms the peak at $k \approx 2$--3: ARI $= 0.89 \pm 0.02$ (mean $\pm$ sd) for the nonlinear autoencoder. A linear PCA baseline achieves even higher ARI ($0.93 \pm 0.01$), indicating that the $k = 2$--3 peak reflects the geometric structure of the input manifold rather than learned nonlinear features (Appendix, Figure~\ref{fig:seed_robustness}).
 
 The critical $k \approx 2$ reflects a \emph{static} topological constraint: the input categories are distinguished by phase relationships with $S^1$ (circular) topology. In our construction, they are embedded as a circle in $\mathbb{R}^2$, so a 1-D bottleneck cannot separate them, whereas $k \geq 2$ is sufficient for static classification. However, as Section~\ref{sec:paradox} demonstrates, when \emph{dynamical} trajectories must evolve over time without cycle aliasing, an additional dimension ($k \geq 3$) becomes functionally important under linear readout---the distinction between ``enough dimensions to separate categories'' and ``enough dimensions to preserve process-state distinctness across cycles.''
 
@@ -188,12 +210,12 @@ The critical $k \approx 2$ reflects a \emph{static} topological constraint: the 
     \label{fig:bottleneck}
 \end{figure}
 
-\subsection{Periodic Processes Require $k \geq 3$ to Avoid Cycle Aliasing}
+\subsection{Periodic Processes Require $k \geq 3$ to Avoid Cycle Aliasing Under Linear Readout}
 \label{sec:paradox}
 
-Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence for the $k \geq 3$ requirement under linear interface constraints. A periodic re-entrant trajectory (illustrated with the Liar's Paradox as an intuitive example) produces 1511 self-intersections when confined to 2D (panel A); in 3D, it forms a helix that separates successive cycles (panel B). The computational illustration is equally clear: a linear autoencoder trained to compress and reconstruct the 3D helix through a $k=2$ bottleneck fails on the time/context dimension (MSE = 0.108), while $k=3$ achieves near-perfect reconstruction (MSE $< 10^{-6}$; panels C--D).
+Figure~\ref{fig:paradox} demonstrates both geometric and computational evidence for the $k \geq 3$ requirement \emph{under linear interface constraints}. A periodic re-entrant trajectory (illustrated with the Liar's Paradox as an intuitive example) produces 1511 self-intersections when confined to 2D (panel A); in 3D, it forms a helix that separates successive cycles (panel B). The computational illustration is equally clear: a linear autoencoder trained to compress and reconstruct the 3D helix through a $k=2$ bottleneck fails on the time/context dimension (MSE = 0.108), while $k=3$ achieves near-perfect reconstruction (MSE $< 10^{-6}$; panels C--D).
 
-The key insight is \emph{cycle aliasing}: under a linear (PCA-like) interface that discards the context dimension, distinct phases of successive cycles become observationally identical. The system cannot distinguish ``first pass through state A'' from ``second pass through state A'' because both map to the same 2D location. A nonlinear decoder could, in principle, encode the cycle index in fewer dimensions---but this would require explicitly representing a monotonic context variable. Our claim is that \emph{linear} readouts (which approximate many biological interfaces) require $k \geq 3$ to preserve process-state distinctness across cycles. The Liar's Paradox is merely an illustrative example; the geometric constraint applies to any periodic process with hidden cycle index (working memory refresh, predictive coding, re-entrant evaluation).
+The key insight is \emph{cycle aliasing}: under a linear (PCA-like) interface that discards the context dimension, distinct phases of successive cycles become observationally identical. The system cannot distinguish ``first pass through state A'' from ``second pass through state A'' because both map to the same 2D location. Formally, a periodic trajectory with monotonic context (topologically $S^1 \times [0,1]$, a helix) cannot be faithfully embedded in 2D under smooth mappings without self-intersections; three dimensions are the minimum for a continuous embedding that preserves process-state distinctness. A nonlinear decoder could, in principle, encode the cycle index in fewer dimensions using a discrete state machine---but biological readouts often approximate linear projections. Our claim is that \emph{continuous geometric} representations under linear interface constraints require $k \geq 3$ to preserve process-state distinctness across cycles. The Liar's Paradox is merely an illustrative example; the geometric constraint applies to any periodic process with hidden cycle index (working memory refresh, predictive coding, re-entrant evaluation).
 
 \begin{figure}[ht]
     \centering
@@ -213,8 +235,11 @@ Figure~\ref{fig:stress} shows that the optimal bottleneck width depends on chann
     \label{fig:stress}
 \end{figure}
 
-\section{Low-Rank Interfaces and Global Recruitment}
+\section{Low-Rank Interfaces and Global Recruitment: A Hypothesis}
 
+\noindent\textit{This section extends the computational results from Section~3 to a conceptual hypothesis about emotion and regulatory capacity. The claims here are speculative and await empirical testing; we include them because they generate concrete predictions and connect the geometric framework to phenomenology.}
+
+\vspace{0.5em}
 The bottleneck experiments (Section~3.2) demonstrate that $k=2$ produces discrete categorical codes while $k \geq 3$ preserves continuous dynamics. But there is a third regime below $k=2$ that merits separate treatment: the \emph{rank-1 interface}, where readout is restricted to a single dimension.
 
 \subsection{Affective Readout as Low-Rank Projection}
@@ -275,6 +300,19 @@ A system with high regulatory capacity experiences emotion (low-rank readout) wi
 
 This is not about suppressing emotion but about \emph{maintaining interface rank under affective pressure}. The slow-wave substrate (high PR, high participation) provides the stability reservoir. When that reservoir is depleted (sleep deprivation, chronic stress, early developmental stage), the system cannot buffer the low-rank signal, and cognition collapses toward affective mode. We use ``regulatory capacity'' rather than ``maturity'' to avoid normative connotations; the capacity varies with state (fatigue, stress) as well as development.
 
+\subsection{Testable Predictions from the Hypothesis}
+
+The emotion-as-low-rank-interface hypothesis generates several concrete, falsifiable predictions:
+
+\begin{enumerate}
+    \item \textbf{Effective communication rank decreases with arousal.} In MEG/EEG source-space connectivity or fMRI effective connectivity, acute stress or high-arousal emotional stimuli should reduce the effective dimensionality (rank) of cross-area communication patterns, measurable via participation ratio of connectivity matrices or PCA of inter-regional time series.
+    \item \textbf{Regulatory capacity correlates with interface rank maintenance.} Individuals with high trait emotion regulation (e.g., high reappraisal scores on ERQ) should show smaller decreases in effective communication rank under emotional challenge compared to low regulators.
+    \item \textbf{Beta-band coherence buffers against rank collapse.} Pre-stimulus frontal beta power should predict maintained cognitive flexibility (e.g., reversal learning, set-shifting) following emotional distraction, mediated by preserved inter-regional communication rank.
+    \item \textbf{Sleep deprivation reduces interface rank capacity.} After sleep deprivation, the effective dimensionality of prefrontal communication patterns during emotion regulation tasks should be reduced compared to rested baseline, indexed by participation ratio or related measures.
+\end{enumerate}
+
+These predictions are grounded in the geometric framework but require empirical testing with appropriate neural population recordings or connectivity analyses.
+
 \section{Discussion}
 
 \subsection{The Frequency Hierarchy}
@@ -295,14 +333,16 @@ Recent empirical work provides direct support for this hierarchy. \citet{chen202
 
 A central premise of the ``low-dimensional subspace'' hypothesis \citep{miller2018working,lundqvist2016gamma} is that the smoothness and low-frequency nature of macroscopic brain waves implies a reduction in the degrees of freedom of the underlying neural substrate.
 
-We argue that this inference commits the category error identified in Section~1.1: \textbf{Miller and colleagues measure interface dimensionality and mistake it for substrate dimensionality}. Their electrodes act as low-dimensional projections of a high-dimensional state. The smooth, coherent signals they observe are precisely what concentration of measure predicts when a high-dimensional system is read out through a limited channel. The regularity is a property of the measurement, not the measured.
+We argue that this inference conflates interface dimensionality with substrate participation (Section~1.1): \textbf{Miller and colleagues measure a low-$k$ interface and infer low $N_{\text{eff}}$}. Their electrodes act as low-dimensional projections of a high-participation state. The smooth, coherent signals they observe are precisely what averaging predicts when many coherent units contribute to a measurement.
 
-In high-dimensional probability theory, the \emph{concentration of measure} phenomenon dictates that as the effective dimensionality of a system increases, the probability mass concentrates rapidly around specific regions---for instance, the equator of a hypersphere \citep{gorban2018blessing}. The relevant quantity is not the raw number of neurons ($N \approx 10^{11}$) but the \emph{effective} number of independently contributing units, which we approximate by the participation ratio (PR). Consider a mode with PR $= N_{\text{eff}}$: the state effectively lives in $\mathbb{R}^{N_{\text{eff}}}$, not $\mathbb{R}^N$. If we assume neural activity is bounded (e.g., on a hypersphere $S^{N_{\text{eff}}-1}$), L\'{e}vy's lemma states that for any Lipschitz continuous function $f$ (such as a local field potential measurement), the probability that $f(\mathbf{x})$ deviates from its median $M_f$ by more than $\epsilon$ decays exponentially with $N_{\text{eff}}$:
+The intuition is straightforward: for a linear measurement $y = \mathbf{w}^\top \mathbf{x}$, if $N_{\text{eff}}$ oscillators contribute coherently to $\mathbf{x}$, the variance of $y$ scales inversely with $N_{\text{eff}}$ (law of large numbers). High-participation modes therefore produce stable, smooth readouts---not because the underlying state is simple, but because averaging across many aligned units suppresses fluctuations. The relevant quantity is not the raw number of neurons ($N \approx 10^{11}$) but the \emph{effective} number of coherently contributing units, which we approximate by the participation ratio (PR).
+
+This intuition can be formalised via \emph{concentration of measure} \citep{gorban2018blessing}. Consider a mode with PR $= N_{\text{eff}}$: the state effectively lives in $\mathbb{R}^{N_{\text{eff}}}$. If neural activity is bounded (e.g., on a hypersphere $S^{N_{\text{eff}}-1}$), L\'{e}vy's lemma states that any Lipschitz function $f$ (such as a local field potential measurement) concentrates around its median exponentially in $N_{\text{eff}}$:
 \begin{equation}
     P(|f(\mathbf{x}) - M_f| \geq \epsilon) \leq 2 \exp(-C \cdot N_{\text{eff}} \cdot \epsilon^2)
     \label{eq:levy}
 \end{equation}
-where $C$ is a constant depending on the Lipschitz constant of $f$. Crucially, our Laplacian analysis (Section~3.1) demonstrates that slow oscillations maximise $N_{\text{eff}}$ (high PR), whereas fast oscillations restrict it. Therefore, slow waves are uniquely subject to the stabilising effects of concentration of measure, appearing smooth and ``low-dimensional'' precisely because they are built from the largest possible number of coordinated units. The raw neuron count is irrelevant; what matters is how many units participate coherently in a given mode.
+where $C$ depends on the Lipschitz constant of $f$. (This formalisation requires assumptions---isotropic activity, bounded support---that are only approximately satisfied in neural systems; the core insight is the simpler averaging argument above.) Our Laplacian analysis (Section~3.1) demonstrates that slow oscillations maximise $N_{\text{eff}}$ (high PR), whereas fast oscillations restrict it. Therefore, slow waves are uniquely subject to averaging-induced stability, appearing smooth and ``low-dimensional'' precisely because they are built from the largest possible number of coordinated units.
 
 This implies that in a truly high-dimensional substrate, macroscopic measurements will essentially \emph{always} appear smooth and deterministic---not because the underlying system is simple, but because the massive dimensionality forces the system into a statistical ``shell'' of stability. The apparent low-dimensionality is a property of the \emph{measurement projection}, not the intrinsic topology of the substrate.
 
@@ -310,9 +350,9 @@ This reinterpretation is supported by recent high-resolution recordings. \citet{
 
 Therefore, the ``slow waves'' observed by Miller and colleagues are not evidence of a low-dimensional controller; they are the expected statistical signature of a high-dimensional substrate undergoing synchronisation. What appears as ``low-dimensional control'' is actually \emph{high-participation alignment}. The brain does not discard dimensions to create simplicity; it aligns them, and concentration of measure makes the result look simple to any finite-dimensional readout.
 
-In the language of Section~1.1: Miller measures the \emph{interface}---the low-dimensional output of an electrode array---and infers that the \emph{substrate} is equally simple. But the interface is a ``slit.'' Its smoothness tells us about the measurement geometry, not the source geometry. The paradox dissolves once we recognise that slow waves can be simultaneously high-dimensional substrates (many oscillators coherently engaged) and low-dimensional interfaces (smooth projections easily measured).\footnote{This substrate/interface distinction has analogues in theoretical physics (e.g., holographic duality), but we rely only on the wave-optics intuition developed in Section~1.1.}
+In the language of Section~1.1: Miller measures the \emph{interface}---the low-dimensional output of an electrode array---and infers low substrate participation. But the interface is a ``slit.'' Its smoothness tells us about the measurement geometry, not the source geometry. The apparent paradox dissolves once we recognise that slow waves can be simultaneously high-participation substrates (many oscillators coherently engaged) and low-dimensional interfaces (smooth projections easily measured).\footnote{This substrate/interface distinction has analogues in theoretical physics (e.g., holographic duality), but we rely only on the wave-optics intuition developed in Section~1.1.}
 
-Notably, recent work from the same laboratory \citep{chen2026spatial} provides empirical support for precisely this reframing. Chen et al.\ show that alpha/beta oscillations form low-dimensional spatial patterns across PFC---but these patterns do not \emph{reduce} substrate dimensionality; they \emph{gate} it. Spiking activity (the high-dimensional content) is expressed only where alpha/beta power is low. The low-dimensional oscillatory signal acts as an interface that controls access to the high-dimensional substrate, not as a replacement for it. This ``spatial computing'' framework vindicates the distinction we draw: the same group's data reveal that ``low-dimensional control'' and ``high-dimensional substrate'' coexist, with the former regulating where the latter can be expressed.
+Notably, recent work from the same laboratory \citep{chen2026spatial} provides empirical support for precisely this reframing. Chen et al.\ show that alpha/beta oscillations form low-dimensional spatial patterns across PFC---but these patterns do not \emph{reduce} substrate participation; they \emph{gate} it. Spiking activity (the high-participation content) is expressed only where alpha/beta power is low. The low-dimensional oscillatory signal acts as an interface that controls access to the high-participation substrate, not as a replacement for it. This ``spatial computing'' framework vindicates the distinction we draw: the same group's data reveal that ``low-dimensional control'' and ``high-participation substrate'' coexist, with the former regulating where the latter can be expressed.
 
 \subsection{Cycle Aliasing and Meta-Cognition}
 
@@ -363,13 +403,17 @@ The framework generates several concrete predictions for future empirical work:
 
 While synthetic validation confirms the PR metric's utility (Figure~\ref{fig:synthetic}), preliminary application to scalp EEG (64-channel recordings) yielded null results, as did exploratory analysis of intracranial SEEG recordings from epilepsy patients (OpenNeuro ds004100; $n=10$ subjects showed a trend in the expected direction with mean slow/fast ratio 1.14$\times$, but high inter-subject variability, likely reflecting pathological tissue and clinically-driven electrode placement). These null or noisy results are consistent with the spatial Nyquist theorem: capturing the geometric difference between global and local modes requires sampling density higher than the spatial frequency of the mode. Scalp EEG (inter-electrode distance $\sim$2--3 cm) spatially aliases local gamma structure, making it indistinguishable from noise. The slow-wave versus fast-wave PR difference requires electrode spacing finer than the spatial scale of functional oscillator units. Cortical columns span $\sim$300--500 $\mu$m; resolving participation at this scale requires Utah-array density ($\sim$400 $\mu$m pitch) or high-density ECoG. Standard ECoG grids (1 cm spacing) may still average over too many columns. This represents a clear experimental target: PR analysis on dense intracranial recordings during tasks requiring flexibility (beta-dominant) versus commitment (gamma-dominant). Additionally, PR computed on sensor-space amplitude envelopes is confounded by volume conduction and reference scheme; future tests should use bipolar/local referencing or connectivity measures less sensitive to zero-lag mixing.
 
-The models presented here isolate geometric and information-theoretic aspects; they do not capture excitatory-inhibitory dynamics, conduction delays, or synaptic nonlinearities. Additionally, Laplacian eigenmodes represent standing wave constraints based on diffusion; while axonal delays enable traveling waves that deviate from these standing modes, the Laplacian defines the structural manifold capacity---the baseline geometric availability of the network before temporal dynamics are applied. Future work should test these predictions in biologically realistic spiking networks and empirical data with appropriate spatial resolution.
+The models presented here isolate geometric and information-theoretic aspects; they do not capture excitatory-inhibitory dynamics, conduction delays, or synaptic nonlinearities. Additionally, Laplacian eigenmodes represent standing wave constraints based on diffusion; while axonal delays enable traveling waves that deviate from these standing modes, the Laplacian defines the structural manifold capacity---the baseline geometric availability of the network before temporal dynamics are applied.
+
+We tested whether the PR hierarchy observed in modular stochastic block models holds in real human brain networks. Analysis of group-average functional connectivity from 30-subject resting-state fMRI (Schaefer 100-region parcellation; Figure~\ref{fig:real_connectome}) confirmed the predicted pattern: smooth Laplacian modes engage significantly more regions than localized modes ($r = -0.50$, smooth/localized ratio $3.2\times$). The effect is weaker than idealized modular simulations ($r = -0.75$), consistent with the observation that real functional connectivity includes long-range correlations and rich-club hubs that distribute participation across modes. Future work should extend this analysis to anatomical structural connectomes (diffusion tractography) and test whether the effect is regionally specific---potentially strongest in highly modular association cortex.
+
+Future work should test these predictions in biologically realistic spiking networks and empirical data with appropriate spatial resolution.
 
 \section{Conclusion}
 
-Cortical oscillations implement a dimensional hierarchy: slow waves maintain the high-dimensional analog substrate; beta provides intermediate ``compliant'' compression for manipulation; gamma enforces discrete symbol formation. The capacity to sustain $k \geq 3$ dynamics---to hold paradoxes without cycle aliasing---may be a geometric signature of regulatory capacity. Long-wavelength stability provides the temporal substrate for flexible cognition; its disruption forces the mind into rigid categorical processing.
+Cortical oscillations implement a dimensional hierarchy: slow waves maintain the high-dimensional analog substrate; beta provides intermediate ``compliant'' compression for manipulation; gamma enforces discrete symbol formation. The capacity to sustain $k \geq 3$ dynamics---to hold contradictions without cycle aliasing---may be a geometric signature of regulatory capacity. Long-wavelength stability provides the temporal substrate for flexible cognition; its disruption forces the mind into rigid categorical processing.
 
-Intelligence emerges from the controlled collapse of analog into digital. The canvas is slow; the brushstrokes are fast.
+This framework suggests that intelligence arises from the controlled compression of analog substrate into discrete symbols---a process mediated by the bottleneck width ($k$) of neural interfaces. The slow-wave substrate provides the high-dimensional ``canvas''; gamma-band activity implements the discretising ``brushstrokes'' that convert continuous states into categorical codes.
 
 \section*{Acknowledgements}
 
@@ -392,7 +436,7 @@ The author thanks the Fulcher Lab, University of Sydney, for feedback on an earl
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/figS1_laplacian_robustness.pdf}
-    \caption{\textbf{Participation ratio effect depends on modular structure.} (A) Correlation between eigenvalue and PR across network types. The negative correlation is strongest for modular networks ($r \approx -0.85$), weaker for lattices ($r \approx -0.22$), and reverses for small-world networks without modular structure ($r \approx +0.73$). (B) PR ratio (slowest 10 modes / fastest 10 modes) confirms modular networks show the largest slow/fast difference. This topology dependence generates a testable prediction: the PR hierarchy should be strongest in association cortex (pronounced columnar modularity) and weaker in sensory areas with more homogeneous connectivity.}
+    \caption{\textbf{Participation ratio effect depends on modular structure.} (A) Correlation between eigenvalue and PR across network types. The negative correlation is strongest for modular networks ($r \approx -0.85$), weaker for lattices ($r \approx -0.22$), and reverses for small-world networks without modular structure ($r \approx +0.73$). (B) PR ratio (smoothest 10 modes / most localized 10 modes) confirms modular networks show the largest smooth/localized difference. This topology dependence generates a testable prediction: the PR hierarchy should be strongest in association cortex (pronounced columnar modularity) and weaker in sensory areas with more homogeneous connectivity.}
     \label{fig:robustness_laplacian}
 \end{figure}
 
@@ -406,7 +450,7 @@ The author thanks the Fulcher Lab, University of Sydney, for feedback on an earl
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/figS3_ensemble_robustness.pdf}
-    \caption{\textbf{Ensemble robustness across 50 random network realisations.} (A) Distribution of correlation between normalised eigenvalue and participation ratio. Mean $r = -0.858 \pm 0.027$, confirming the negative correlation is robust across network draws. (B) Distribution of the slow/fast PR ratio (mean of slowest 15 modes divided by mean of fastest 15 modes). Mean ratio $= 6.4 \pm 1.2$: slow modes consistently engage $\sim$6$\times$ more oscillators than fast modes. All networks used identical parameters: $N = 2500$ nodes, 25 modules, $p_{\text{within}} = 0.3$, $p_{\text{between}} = 0.01$.}
+    \caption{\textbf{Ensemble robustness across 50 random network realisations.} (A) Distribution of correlation between normalised eigenvalue and participation ratio. Mean $r = -0.858 \pm 0.027$, confirming the negative correlation is robust across network draws. (B) Distribution of the smooth/localized PR ratio (mean of smoothest 15 modes divided by mean of most localized 15 modes). Mean ratio $= 6.4 \pm 1.2$: smooth modes consistently engage $\sim$6$\times$ more oscillators than localized modes. All networks used identical parameters: $N = 2500$ nodes, 25 modules, $p_{\text{within}} = 0.3$, $p_{\text{between}} = 0.01$.}
     \label{fig:ensemble_robustness}
 \end{figure}
 
@@ -415,6 +459,13 @@ The author thanks the Fulcher Lab, University of Sydney, for feedback on an earl
     \includegraphics[width=0.85\textwidth]{figures/figS4_seed_robustness.pdf}
     \caption{\textbf{Seed robustness for bottleneck code formation.} Comparison of nonlinear autoencoder (blue) versus linear PCA baseline (red) across 10 random seeds. Error bars show standard deviation. Both methods show peak code formation (ARI) at $k \approx 2$--3. The linear baseline achieves slightly higher ARI than the autoencoder (0.93 vs.\ 0.89 at $k=2$), indicating that the critical bottleneck width reflects the geometric structure of the phase-gradient input manifold rather than learned nonlinear features. The consistency across seeds (sd $\approx 0.01$--0.02) confirms this is a robust property of the bottleneck architecture.}
     \label{fig:seed_robustness}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/figS5_connectome_robustness.pdf}
+    \caption{\textbf{Functional connectivity result is robust to preprocessing choices.} The negative correlation between Laplacian eigenvalue and participation ratio persists across five preprocessing variants: absolute correlations (main text), positive-only weights, thresholded graphs (top 50\% and 20\% of edges), and normalized Laplacian. (A) All methods yield negative correlations ($r = -0.45$ to $-0.62$), confirming smooth modes consistently engage more regions than localized modes. (B) The smooth/localized PR ratio ranges from $2.3\times$ to $5.9\times$ depending on preprocessing, with sparser graphs showing stronger effects. The qualitative pattern is robust; quantitative magnitude varies with density and normalization choices.}
+    \label{fig:connectome_robustness}
 \end{figure}
 
 \clearpage
