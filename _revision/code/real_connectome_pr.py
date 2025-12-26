@@ -163,9 +163,9 @@ def plot_results(freq_norm, participation, r, pr_ratio, slow_pr, fast_pr, title)
                     fontsize=11, ha='center', fontweight='bold', color='black')
 
     plt.tight_layout()
-    plt.savefig(FIGURES / "fig6_real_connectome_pr.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig6_real_connectome_pr.png", dpi=150, bbox_inches='tight')
-    print(f"\nFigure saved to {FIGURES / 'fig6_real_connectome_pr.pdf'}")
+    plt.savefig(FIGURES / "fig3_real_connectome_pr.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig3_real_connectome_pr.png", dpi=150, bbox_inches='tight')
+    print(f"\nFigure saved to {FIGURES / 'fig3_real_connectome_pr.pdf'}")
     plt.close()
 
 

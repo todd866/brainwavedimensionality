@@ -393,9 +393,9 @@ def plot_results(results, states, labels):
     ax3.set_title('C. The Mechanism', fontweight='bold')
 
     # Save
-    plt.savefig(FIGURES / "fig3_code_formation_bottleneck.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig3_code_formation_bottleneck.png", dpi=150, bbox_inches='tight')
-    print(f"\nFigure saved to {FIGURES / 'fig3_code_formation_bottleneck.pdf'}")
+    plt.savefig(FIGURES / "fig4_code_formation_bottleneck.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig4_code_formation_bottleneck.png", dpi=150, bbox_inches='tight')
+    print(f"\nFigure saved to {FIGURES / 'fig4_code_formation_bottleneck.pdf'}")
 
     plt.close()
 
@@ -456,9 +456,9 @@ def run_noise_sweep():
 
     plt.colorbar(im, label='Code Formation (ARI)')
     plt.tight_layout()
-    plt.savefig(FIGURES / "fig5_stress_collapse.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig5_stress_collapse.png", dpi=150, bbox_inches='tight')
-    print(f"\nSaved {FIGURES / 'fig5_stress_collapse.pdf'}")
+    plt.savefig(FIGURES / "fig6_stress_collapse.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig6_stress_collapse.png", dpi=150, bbox_inches='tight')
+    print(f"\nSaved {FIGURES / 'fig6_stress_collapse.pdf'}")
 
     return heatmap_ari, noise_levels, dims
 

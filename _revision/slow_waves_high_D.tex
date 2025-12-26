@@ -187,7 +187,7 @@ The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms th
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/fig6_real_connectome_pr.pdf}
+    \includegraphics[width=\textwidth]{figures/fig3_real_connectome_pr.pdf}
     \caption{\textbf{Real human functional connectivity validates the smooth$>$localized participation pattern.} (A) Participation ratio versus normalised Laplacian eigenvalue in group-average functional connectivity from 30-subject resting-state fMRI (Schaefer 100 parcellation; absolute correlation values). Smooth modes (low eigenvalue) engage significantly more regions than localized modes ($r = -0.50$). (B) Mean participation: smooth modes engage $3.2\times$ more regions than localized modes (9.1 vs 2.8). The effect is weaker than idealized modular simulations but confirms the qualitative prediction in an empirical brain-derived network.}
     \label{fig:real_connectome}
 \end{figure}
@@ -200,7 +200,7 @@ The critical $k \approx 2$ reflects a \emph{static} topological constraint: the 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/fig3_code_formation_bottleneck.pdf}
+    \includegraphics[width=\textwidth]{figures/fig4_code_formation_bottleneck.pdf}
     \caption{\textbf{Discrete codes emerge at critical capacity.} (A) Code formation (ARI) peaks at $k \approx 2$--3, reflecting the $S^1$ topology of the phase-defined categories. (B) Bottleneck codes at $k=2$ form six distinct clusters, each interpretable as a proto-symbol. (C) Schematic: high-dimensional slow-wave patterns compress through a noisy bottleneck, forcing discretisation when channel capacity is limited.}
     \label{fig:bottleneck}
 \end{figure}
@@ -214,7 +214,7 @@ The key insight is \emph{cycle aliasing}: under a linear (PCA-like) interface th
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\textwidth]{figures/fig4_paradox_topology.pdf}
+    \includegraphics[width=\textwidth]{figures/fig5_paradox_topology.pdf}
     \caption{\textbf{Periodic processes require $k \geq 3$ to avoid cycle aliasing.} (A) In 2D, a periodic re-entrant trajectory (Liar's Paradox as illustrative example) suffers cycle aliasing (1511 intersections; point pairs $<0.15$ units apart but $>10$ steps distant). Colour encodes time/context. (B) In 3D, the trajectory forms a helix that separates successive cycles. (C) Learning dynamics: $k=2$ plateaus at high MSE; $k=3$ converges to near-zero. (D) Context reconstruction: $k=2$ cannot recover the cycle index because aliasing forces distinct contexts to the same bottleneck state (red); $k=3$ preserves process-state distinctness (green). The geometric point generalises beyond paradoxes to any periodic process with hidden cycle index.}
     \label{fig:paradox}
 \end{figure}
@@ -225,7 +225,7 @@ Figure~\ref{fig:stress} shows that the optimal bottleneck width depends on chann
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig5_stress_collapse.pdf}
+    \includegraphics[width=0.85\textwidth]{figures/fig6_stress_collapse.pdf}
     \caption{\textbf{Noise forces topological collapse.} Code formation (ARI) heatmap across bottleneck width ($k$) and channel noise ($\sigma$). At low noise (bottom), the system supports higher-dimensional nuance ($k \geq 3$). At high noise (top), optimal coding collapses to $k = 2$: binary categorisation becomes the only robust strategy. This provides a computational mechanism for stress-induced rigid thinking.}
     \label{fig:stress}
 \end{figure}

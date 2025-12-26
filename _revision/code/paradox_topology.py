@@ -213,9 +213,9 @@ def visualize_paradox_topology():
     plt.tight_layout()
 
     # Save
-    plt.savefig(FIGURES / "fig4_paradox_topology.pdf", dpi=300, bbox_inches='tight')
-    plt.savefig(FIGURES / "fig4_paradox_topology.png", dpi=150, bbox_inches='tight')
-    print(f"Saved: {FIGURES / 'fig4_paradox_topology.pdf'}")
+    plt.savefig(FIGURES / "fig5_paradox_topology.pdf", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES / "fig5_paradox_topology.png", dpi=150, bbox_inches='tight')
+    print(f"Saved: {FIGURES / 'fig5_paradox_topology.pdf'}")
 
     plt.close()
 
