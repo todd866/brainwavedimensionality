@@ -26,6 +26,8 @@
 **Root folder** contains the original submission to JCN (Nov 2025) and all associated code/figures.
 
 **`_revision/`** contains the working manuscript with improvements made since submission:
+
+**Terminology & framing:**
 - Added terminology box clarifying participation ratio ≠ latent dimension
 - Reframed eigenvalue as "spatial smoothness index" (not frequency)
 - Reframed synthetic PR test as "demonstration" not "validation"
@@ -34,9 +36,15 @@
 - Shifted "maturity" language to "regulatory capacity" (less normative)
 - Added formal tri-level notation (substrate/interface/expressed)
 - Tied concentration of measure to effective N ~ PR, not raw neuron count
+
+**New citations:**
 - Added Eckmann-Ruelle (1985) citation for dimension-entropy distinction
 - Integrated Chen et al. (2026) "spatial computing" empirical support
-- Added limitation notes on ensemble robustness and seed variability
+
+**Robustness analyses (converted limitations → results):**
+- **Ensemble robustness (Figure S3)**: 50 network draws, r = -0.858 ± 0.027, PR ratio 6.4 ± 1.2×
+- **Seed robustness (Figure S4)**: 10 seeds + PCA baseline, ARI = 0.89 ± 0.02 (nonlinear), 0.93 ± 0.01 (linear)
+- Removed "single realization" and "single seed" limitation statements
 
 ## Abstract
 

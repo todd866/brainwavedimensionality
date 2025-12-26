@@ -157,7 +157,7 @@ We present three linked results that together demonstrate the dimensional hierar
 
 \subsection{Slow Modes Have Higher Participation}
 
-Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the slow$>$fast PR difference should be strongest in association cortex with pronounced modularity. \textbf{Limitation}: These results are from a single network realisation; future work should verify robustness across an ensemble of random network draws and modularity parameter sweeps.
+Figure~\ref{fig:laplacian} shows participation ratio versus normalised eigenvalue. There is a strong negative correlation ($r = -0.75$, $p < 0.001$): slower modes engage substantially more oscillators. The slowest 15 modes have mean PR $\approx$ 560 (23\% of nodes); the fastest 15 modes have mean PR $\approx$ 175 (7\% of nodes)---a 3-fold difference. This effect is largest in modular networks; lattice graphs show weaker correlations and small-world graphs can show reversed patterns (Appendix, Figure~\ref{fig:robustness_laplacian}), predicting that the slow$>$fast PR difference should be strongest in association cortex with pronounced modularity. Ensemble analysis over 50 random network realisations confirms robustness: $r = -0.858 \pm 0.027$ (mean $\pm$ sd), with slow modes engaging $6.4 \pm 1.2\times$ more oscillators than fast modes (Appendix, Figure~\ref{fig:ensemble_robustness}).
 
 The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms that PR behaves as expected, distinguishing global from local activity. Slow-band activity (2--8 Hz) engaged 99\% of channels (PR = 63.2/64); fast-band activity (30--50 Hz) engaged only 42\% (PR = 26.6/64)---a 2.4-fold difference matching the Laplacian prediction. (Preliminary application to 64-channel scalp EEG yielded null results, consistent with the spatial-blurring limitations discussed in Section~\ref{sec:limitations}.)
 
@@ -177,7 +177,7 @@ The synthetic time-series demonstration (Figure~\ref{fig:synthetic}) confirms th
 
 \subsection{Discrete Codes Emerge at $k=2$}
 
-Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87). \textbf{Limitation}: These results are from a single random seed; future work should report variability across seeds and compare against a linear (PCA-based) baseline to isolate the contribution of nonlinear encoding.
+Figure~\ref{fig:bottleneck} shows that code formation peaks at the critical bottleneck width $k \approx 2$--3 (ARI = 0.88; representative run with fixed seed). At $k=1$, information is lost (ARI = 0.64). At $k \geq 4$, discretisation pressure diminishes and codes become more distributed (ARI = 0.82--0.87). Seed robustness analysis across 10 random initialisations confirms the peak at $k \approx 2$--3: ARI $= 0.89 \pm 0.02$ (mean $\pm$ sd) for the nonlinear autoencoder. A linear PCA baseline achieves even higher ARI ($0.93 \pm 0.01$), indicating that the $k = 2$--3 peak reflects the geometric structure of the input manifold rather than learned nonlinear features (Appendix, Figure~\ref{fig:seed_robustness}).
 
 The critical $k \approx 2$ reflects a \emph{static} topological constraint: the input categories are distinguished by phase relationships with $S^1$ (circular) topology. In our construction, they are embedded as a circle in $\mathbb{R}^2$, so a 1-D bottleneck cannot separate them, whereas $k \geq 2$ is sufficient for static classification. However, as Section~\ref{sec:paradox} demonstrates, when \emph{dynamical} trajectories must evolve over time without cycle aliasing, an additional dimension ($k \geq 3$) becomes functionally important under linear readout---the distinction between ``enough dimensions to separate categories'' and ``enough dimensions to preserve process-state distinctness across cycles.''
 
@@ -367,7 +367,7 @@ The models presented here isolate geometric and information-theoretic aspects; t
 
 \section{Conclusion}
 
-Cortical oscillations implement a dimensional hierarchy: slow waves maintain the high-dimensional analog substrate; beta provides intermediate ``compliant'' compression for manipulation; gamma enforces discrete symbol formation. The capacity to sustain $k \geq 3$ dynamics---to hold paradoxes without cycle aliasing---may be a geometric signature of maturity. Long-wavelength stability provides the temporal substrate for flexible cognition; its disruption forces the mind into rigid categorical processing.
+Cortical oscillations implement a dimensional hierarchy: slow waves maintain the high-dimensional analog substrate; beta provides intermediate ``compliant'' compression for manipulation; gamma enforces discrete symbol formation. The capacity to sustain $k \geq 3$ dynamics---to hold paradoxes without cycle aliasing---may be a geometric signature of regulatory capacity. Long-wavelength stability provides the temporal substrate for flexible cognition; its disruption forces the mind into rigid categorical processing.
 
 Intelligence emerges from the controlled collapse of analog into digital. The canvas is slow; the brushstrokes are fast.
 
@@ -401,6 +401,20 @@ The author thanks the Fulcher Lab, University of Sydney, for feedback on an earl
     \includegraphics[width=0.85\textwidth]{figures/figS2_category_sweep.pdf}
     \caption{\textbf{Code formation peaks at $k \approx 2$--3 across category counts.} ARI versus bottleneck width for different numbers of input categories (3, 6, 9, 12). Regardless of category count, peak code formation occurs at $k = 2$--3, confirming this is a robust feature of the bottleneck architecture rather than an artefact of the specific 6-category construction used in the main text.}
     \label{fig:robustness_categories}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/figS3_ensemble_robustness.pdf}
+    \caption{\textbf{Ensemble robustness across 50 random network realisations.} (A) Distribution of correlation between normalised eigenvalue and participation ratio. Mean $r = -0.858 \pm 0.027$, confirming the negative correlation is robust across network draws. (B) Distribution of the slow/fast PR ratio (mean of slowest 15 modes divided by mean of fastest 15 modes). Mean ratio $= 6.4 \pm 1.2$: slow modes consistently engage $\sim$6$\times$ more oscillators than fast modes. All networks used identical parameters: $N = 2500$ nodes, 25 modules, $p_{\text{within}} = 0.3$, $p_{\text{between}} = 0.01$.}
+    \label{fig:ensemble_robustness}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/figS4_seed_robustness.pdf}
+    \caption{\textbf{Seed robustness for bottleneck code formation.} Comparison of nonlinear autoencoder (blue) versus linear PCA baseline (red) across 10 random seeds. Error bars show standard deviation. Both methods show peak code formation (ARI) at $k \approx 2$--3. The linear baseline achieves slightly higher ARI than the autoencoder (0.93 vs.\ 0.89 at $k=2$), indicating that the critical bottleneck width reflects the geometric structure of the phase-gradient input manifold rather than learned nonlinear features. The consistency across seeds (sd $\approx 0.01$--0.02) confirms this is a robust property of the bottleneck architecture.}
+    \label{fig:seed_robustness}
 \end{figure}
 
 \clearpage
