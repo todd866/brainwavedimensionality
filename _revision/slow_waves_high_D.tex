@@ -26,12 +26,6 @@ Ian Todd\\
 Influential work suggests that low-frequency brain oscillations implement ``low-dimensional'' control, while gamma activity supports ``high-dimensional'' information processing. We argue this framing conflates three distinct notions that can vary independently: \emph{substrate participation} (how many oscillators contribute coherently), \emph{interface dimensionality} (how many degrees of freedom a readout exposes), and \emph{expressed structure} (the complexity of downstream patterns). Using graph Laplacian analysis on modular networks, we show that spatially smooth eigenmodes engage substantially more oscillators than localized modes ($r = -0.75$), establishing long-wavelength activity as high-participation \emph{substrates}---even though they appear smooth through low-dimensional measurement \emph{interfaces}. Using encoder-decoder networks, we demonstrate that different interface widths support qualitatively different computations: $k=2$ produces discrete categorical codes; $k \geq 3$ preserves continuous dynamics capable of representing periodic processes without cycle aliasing (where distinct iterations become observationally identical); low-rank readout ($k \approx 1$--3) functions as mode selection rather than representation. We propose that emotion operates as an endogenous low-rank interface: a dimensionally constrained readout that ``diffracts'' through coupling matrices to produce system-wide effects---explaining why strong emotion feels like the whole brain agrees. The capacity to sustain high-rank interfaces ($k \geq 3$) despite ongoing low-rank affective readouts may be a geometric signature of cognitive regulatory capacity. Noise degrades interface rank: stress-induced collapse to $k=2$ or lower is not irrationality but an adaptive response when channel capacity is compromised.
 \end{abstract}
 
-\vspace{0.5em}
-\noindent\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule}{%
-\textbf{Terminology note.} We use \emph{substrate participation} (measured by participation ratio, PR, or effective count $N_{\text{eff}}$) to describe how many oscillators contribute coherently to a mode. This is \textbf{not} the same as latent trajectory dimensionality (PCA, manifold learning). These quantities vary independently: a slow wave may engage many oscillators (high $N_{\text{eff}}$) while tracing a simple trajectory, whereas local gamma bursts may engage few oscillators (low $N_{\text{eff}}$) while exhibiting complex dynamics.
-}}
-\vspace{0.5em}
-
 \noindent\textbf{Keywords:} cortical oscillations, compression bottleneck, participation ratio, graph Laplacian, dimensional hierarchy, neural coding
 
 \section{Introduction}
@@ -71,20 +65,21 @@ This reframing resolves the apparent paradox. A slow wave sweeping across cortex
 
 We propose that the frequency spectrum implements a \emph{dimensional hierarchy}---a cascade of compression bottlenecks characterised by spatial participation (how many oscillators engage coherently), not latent state-space dimensionality. As a working hypothesis, we suggest the following mapping between bands and the two key metrics:
 
-\begin{center}
-\textbf{Table: Working hypothesis---frequency bands as dimensional regimes}\\[0.5em]
-\begin{tabular}{lcccc}
+\begin{table}[ht]
+\centering
+\small
+\caption{Working hypothesis: frequency bands as dimensional regimes. $N_{\text{eff}}$ (participation ratio) describes how many oscillators engage coherently; $k$ (interface rank) describes the effective dimensionality of a downstream readout. Delta/theta primarily provides substrate; interface rank $k$ applies when downstream circuits read out.}
+\label{tab:hierarchy}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Band} & \textbf{Participation ($N_{\text{eff}}$)} & \textbf{Interface ($k$)} & \textbf{Topology} & \textbf{Function} \\
+\textbf{Band} & \textbf{Participation} & \textbf{Interface} & \textbf{Topology} & \textbf{Function} \\
 \midrule
-Delta/Theta & High & (substrate, not interface) & Volumetric & Raw analog substrate \\
-Beta & Moderate & $k \approx 3$ & Compliant manifold & Manipulation, meta-cognition \\
-Gamma & Low & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
+Delta/Theta & High $N_{\text{eff}}$ & (substrate) & Volumetric & Analog substrate \\
+Beta & Moderate & $k \approx 3$ & Compliant manifold & Meta-cognition \\
+Gamma & Low $N_{\text{eff}}$ & $k \approx 2$ & Discrete clusters & Symbols, decisions \\
 \bottomrule
 \end{tabular}
-\end{center}
-
-\noindent Note: $N_{\text{eff}}$ (participation ratio) describes how many oscillators engage coherently---the ``canvas.'' $k$ (interface rank) describes the effective dimensionality of a downstream readout---the ``aperture.'' Delta/theta activity primarily provides substrate; the interface rank $k$ applies when downstream circuits read out from this substrate.
+\end{table}
 
 The key insight is that \textbf{different bottleneck widths support qualitatively different computations}. At $k=2$, the system is forced to discretise---continuous manifolds collapse into distinct attractor basins (``symbols''). At $k \geq 3$, the system retains enough dimensionality to represent continuous processes, including self-referential structures that would suffer \emph{cycle aliasing} in lower dimensions---where distinct timepoints in a recurring process become observationally indistinguishable.
 
@@ -272,17 +267,21 @@ This explains why strong emotion \emph{feels} like the whole brain agrees. A low
 
 We can now distinguish three interface types with qualitatively different computational properties:
 
-\begin{center}
-\begin{tabular}{lcll}
+\begin{table}[ht]
+\centering
+\small
+\caption{Interface types with qualitatively different computational properties.}
+\label{tab:interfaces}
+\begin{tabular}{@{}lcll@{}}
 \toprule
-\textbf{Interface Type} & \textbf{Rank} & \textbf{Function} & \textbf{Example} \\
+\textbf{Type} & \textbf{Rank} & \textbf{Function} & \textbf{Example} \\
 \midrule
-Affective readout & $k \approx 1$--3 (low-rank) & Mode selection, policy broadcast & Fear, anger, arousal \\
-Categorical bottleneck & $k = 2$ & Discrete symbols & Decisions, labels, assertions \\
-Compliant manifold & $k \geq 3$ & Analog manipulation & Reasoning, meta-cognition \\
+Affective & $k \approx 1$--3 & Mode selection & Fear, arousal \\
+Categorical & $k = 2$ & Discrete symbols & Decisions, labels \\
+Compliant & $k \geq 3$ & Analog manipulation & Reasoning \\
 \bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 
 The key insight is that \textbf{low-rank affective interfaces are not simplified versions of categorical interfaces}. They serve a different function: not representing content but \emph{selecting the manifold on which content is processed}. Emotion picks which attractor landscape the system inhabits; schemas determine where on that landscape the trajectory can go. Under stress or urgency, affective readout collapses toward rank-1, producing the ``whole brain agrees'' phenomenology of strong emotion.
 
